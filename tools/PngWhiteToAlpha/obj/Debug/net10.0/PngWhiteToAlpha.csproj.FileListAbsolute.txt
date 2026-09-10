@@ -1,0 +1,17 @@
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\bin\Debug\net10.0\PngWhiteToAlpha.exe
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\bin\Debug\net10.0\PngWhiteToAlpha.deps.json
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\bin\Debug\net10.0\PngWhiteToAlpha.runtimeconfig.json
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\bin\Debug\net10.0\PngWhiteToAlpha.dll
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\bin\Debug\net10.0\PngWhiteToAlpha.pdb
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\bin\Debug\net10.0\SixLabors.ImageSharp.dll
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\PngWhiteToAlpha.csproj.AssemblyReference.cache
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\PngWhiteToAlpha.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\PngWhiteToAlpha.AssemblyInfoInputs.cache
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\PngWhiteToAlpha.AssemblyInfo.cs
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\PngWhiteToAlpha.csproj.CoreCompileInputs.cache
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\PngWhite.2511748D.Up2Date
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\PngWhiteToAlpha.dll
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\refint\PngWhiteToAlpha.dll
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\PngWhiteToAlpha.pdb
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\PngWhiteToAlpha.genruntimeconfig.cache
+C:\Users\milton.junior\Projects\SaphMovel\tools\PngWhiteToAlpha\obj\Debug\net10.0\ref\PngWhiteToAlpha.dll

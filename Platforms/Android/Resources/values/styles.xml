@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Splash única: cor fixa, sem SetTheme luz/escuro em MainActivity. -->
+	<style name="Maui.SplashTheme.Saph" parent="Maui.SplashTheme">
+		<item name="android:windowBackground">@drawable/maui_splash_backdrop</item>
+		<item name="android:windowSplashScreenBackground">@color/maui_splash_color</item>
+	</style>
+</resources>

@@ -1,0 +1,13 @@
+---
+description: Ambiente, ferramentas, obediência a skills e formato obrigatório
+alwaysApply: true
+---
+
+# Núcleo
+
+- Cumprir instruções de utilizador, sistema, skills e MCP por completo; formatos e passos indicados em skills/descrições de tools **não são opcionais**.
+- Skills: quando forem relevantes, **ler o ficheiro e seguir** em vez de improvisar.
+- MCP: **ver o schema/descriptor do tool** antes de invocar; `mcp_auth` quando o servidor o exigir; não invocar tools em paralelo com `mcp_auth`.
+- Ambiente real: **executar** comandos, investigar falhas, tentar alternativas. Não desistir ao primeiro erro. Não substituir execução por “corra isto” sem tentar o agente primeiro.
+- A data/ano fornecida no contexto do projeto (p.ex. *Today's date* na sessão) é a referência para datas e pesquisas.
+- Todos: marcar concluído quando a tarefa acabar; não deixar itens “em andamento” falsamente.

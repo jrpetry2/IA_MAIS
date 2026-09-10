@@ -1,0 +1,3 @@
+# Regras adicionais para o R8 (construções com AndroidLinkTool).
+# Ref.: java.lang.NoClassDefFoundError — androidx.lifecycle.SavedStateHandleSupport
+-keep,allowobfuscation class androidx.lifecycle.SavedStateHandleSupport { *; }

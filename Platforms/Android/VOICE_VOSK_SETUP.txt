@@ -1,0 +1,38 @@
+SAPH Móvel — Vosk 100% offline (Android)
+
+1) Modelo de voz em português (obrigatório para reconhecer «Solicitar Abastecimento»)
+   - Descarregue o ZIP em https://alphacephei.com/vosk/models (modelo pequeno PT).
+   - O ficheiro descarregado costuma chamar-se algo como:
+       vosk-model-small-pt-0.zip
+     (o número final pode variar consoante a versão no site.)
+   - Se abrir esse ZIP no Explorador de ficheiros do Windows (sem extrair), verá uma pasta interior,
+     por exemplo:
+       vosk-model-small-pt-0.3
+     É dentro dessa pasta que estão final.mdl, mfcc.conf, *.fst, ivector/, etc. — não precisa de
+     descompactar manualmente; o app extrai o ZIP na primeira execução.
+   - Os pacotes recentes usam esse layout «compacto» na raiz dessa pasta; pacotes muito antigos
+     podem usar pastas am/, conf/, graph/.
+
+2) Empacotar no MAUI
+   - Coloque **um** dos seguintes ficheiros em Resources/Raw (o nome do ficheiro no disco importa):
+       vosk-model-small-pt.zip          (opcional: renomear o ZIP descarregado para este nome)
+       ou
+       vosk-model-small-pt-0.zip        (pode usar o nome tal como veio do site, se for exactamente este)
+   - O *.csproj empacota como MauiAsset com LogicalName igual ao nome do ficheiro; a app tenta abrir
+     primeiro vosk-model-small-pt.zip e depois vosk-model-small-pt-0.zip.
+   - Depois de adicionar ou substituir o ZIP: Clean + Rebuild + reinstalar o APK no telemóvel;
+     instalação incremental por vezes não inclui o novo asset.
+
+3) Arranque em runtime
+   - Na primeira execução o ZIP é extraído para a pasta de dados da app
+     (FileSystem.AppDataDirectory / vosk-model-pt-extracted).
+
+4) Uso
+   - Wake phrase: «olá sistema»
+   - Comando inicial de exemplo: «Solicitar Abastecimento» (mesmo texto da linha do menu STATUS).
+   - Frases aceites na mesma sessão de reconhecimento ou em frases consecutivas:
+       «olá sistema Solicitar Abastecimento»
+       ou «olá sistema» seguido de «Solicitar Abastecimento».
+
+5) Licença Vosk / modelo
+   - Respeite as licenças alphacephei/vosk e do modelo escolhido.

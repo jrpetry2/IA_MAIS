@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	x:Class="SaphMovel.Pages.AvaliacaoInicialPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	Title="Avaliação Inicial"
+	BackgroundColor="#0F1211"
+	Shell.NavBarIsVisible="False">
+
+	<Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+		<Grid
+			Grid.Row="0"
+			Padding="4,8,12,8"
+			ColumnDefinitions="Auto,*"
+			BackgroundColor="#0F1211">
+			<Button
+				Grid.Column="0"
+				Padding="12,8"
+				BackgroundColor="Transparent"
+				Command="{Binding VoltarCommand}"
+				FontSize="22"
+				Text="←"
+				TextColor="White" />
+			<Label
+				Grid.Column="1"
+				FontAttributes="Bold"
+				FontSize="18"
+				Text="Avaliação Inicial"
+				TextColor="White"
+				VerticalOptions="Center" />
+		</Grid>
+
+		<Border
+			Grid.Row="1"
+			Margin="16,4,16,0"
+			Padding="14,12"
+			BackgroundColor="#000000"
+			StrokeThickness="0">
+			<Border.StrokeShape>
+				<RoundRectangle CornerRadius="14" />
+			</Border.StrokeShape>
+			<HorizontalStackLayout Spacing="10">
+				<Label FontSize="22" Text="{Binding PatientEmoji}" VerticalOptions="Center" />
+				<Label
+					FontAttributes="Bold"
+					FontSize="15"
+					Text="{Binding PatientSummary}"
+					TextColor="White"
+					VerticalOptions="Center" />
+			</HorizontalStackLayout>
+		</Border>
+
+		<Label
+			Grid.Row="2"
+			Margin="20,10,20,6"
+			FontSize="11"
+			Text="* CAMPO OBRIGATÓRIO"
+			TextColor="#E57373" />
+
+		<ScrollView Grid.Row="3">
+			<VerticalStackLayout Padding="16,0,16,24" Spacing="16">
+				<!-- Chegada da Equipe -->
+				<Grid ColumnDefinitions="Auto,*" BackgroundColor="#252B29" HeightRequest="44">
+					<BoxView Grid.Column="0" WidthRequest="4" Color="#24B2A1" VerticalOptions="Fill" />
+					<Label
+						Grid.Column="1"
+						Margin="12,0,0,0"
+						FontAttributes="Bold"
+						FontSize="14"
+						Text="Chegada da Equipe"
+						TextColor="White"
+						VerticalOptions="Center" />
+				</Grid>
+
+				<VerticalStackLayout Spacing="6">
+					<Label
+						FontAttributes="Bold"
+						FontSize="13"
+						Text="REPORTE DA CHEGADA"
+						TextColor="White" />
+					<Editor
+						AutoSize="TextChanges"
+						BackgroundColor="#1E2422"
+						MinimumHeightRequest="120"
+						Placeholder="Descreva a chegada da equipe ao local..."
+						PlaceholderColor="#6B7280"
+						Text="{Binding Form.ReporteChegada}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<!-- ABCD -->
+				<Grid Margin="0,8,0,0" ColumnDefinitions="Auto,*" BackgroundColor="#252B29" HeightRequest="44">
+					<BoxView Grid.Column="0" WidthRequest="4" Color="#24B2A1" VerticalOptions="Fill" />
+					<Label
+						Grid.Column="1"
+						Margin="12,0,0,0"
+						FontAttributes="Bold"
+						FontSize="14"
+						Text="ABCD"
+						TextColor="White"
+						VerticalOptions="Center" />
+				</Grid>
+
+				<VerticalStackLayout Spacing="6">
+					<Label
+						FontAttributes="Bold"
+						FontSize="12"
+						Text="A - VIAS AÉREAS"
+						TextColor="White" />
+					<Picker
+						Title="Selecione"
+						TitleColor="#9CA3AF"
+						BackgroundColor="#1E2422"
+						ItemsSource="{Binding OpcoesViasAereas}"
+						SelectedItem="{Binding Form.ViasAereas, Mode=TwoWay}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label
+						FontAttributes="Bold"
+						FontSize="12"
+						Text="B - RESPIRAÇÃO"
+						TextColor="White" />
+					<Picker
+						Title="Selecione"
+						TitleColor="#9CA3AF"
+						BackgroundColor="#1E2422"
+						ItemsSource="{Binding OpcoesRespiracao}"
+						SelectedItem="{Binding Form.Respiracao, Mode=TwoWay}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label
+						FontAttributes="Bold"
+						FontSize="12"
+						Text="C - CIRCULAÇÃO"
+						TextColor="White" />
+					<Picker
+						Title="Selecione"
+						TitleColor="#9CA3AF"
+						BackgroundColor="#1E2422"
+						ItemsSource="{Binding OpcoesCirculacao}"
+						SelectedItem="{Binding Form.Circulacao, Mode=TwoWay}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label
+						FontAttributes="Bold"
+						FontSize="12"
+						Text="D - ABERTURA OCULAR"
+						TextColor="White" />
+					<Picker
+						Title="Selecione"
+						TitleColor="#9CA3AF"
+						BackgroundColor="#1E2422"
+						ItemsSource="{Binding OpcoesAberturaOcular}"
+						SelectedItem="{Binding Form.AberturaOcular, Mode=TwoWay}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label
+						FontAttributes="Bold"
+						FontSize="12"
+						Text="D - RESPOSTA MOTORA"
+						TextColor="White" />
+					<Picker
+						Title="Selecione"
+						TitleColor="#9CA3AF"
+						BackgroundColor="#1E2422"
+						ItemsSource="{Binding OpcoesRespostaMotora}"
+						SelectedItem="{Binding Form.RespostaMotora, Mode=TwoWay}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label
+						FontAttributes="Bold"
+						FontSize="12"
+						Text="D - RESPOSTA VERBAL"
+						TextColor="White" />
+					<Picker
+						Title="Selecione"
+						TitleColor="#9CA3AF"
+						BackgroundColor="#1E2422"
+						ItemsSource="{Binding OpcoesRespostaVerbal}"
+						SelectedItem="{Binding Form.RespostaVerbal, Mode=TwoWay}"
+						TextColor="White" />
+				</VerticalStackLayout>
+			</VerticalStackLayout>
+		</ScrollView>
+
+		<Grid
+			Grid.Row="4"
+			Padding="16,12,16,20"
+			ColumnDefinitions="*,*"
+			ColumnSpacing="12"
+			BackgroundColor="#0A0D0C">
+			<Button
+				Grid.Column="0"
+				Padding="12,14"
+				BackgroundColor="Transparent"
+				BorderColor="White"
+				BorderWidth="1"
+				Command="{Binding VoltarCommand}"
+				CornerRadius="10"
+				FontAttributes="Bold"
+				Text="VOLTAR"
+				TextColor="White" />
+			<Button
+				Grid.Column="1"
+				Padding="12,14"
+				BackgroundColor="#24B2A1"
+				Command="{Binding EnviarCommand}"
+				CornerRadius="10"
+				FontAttributes="Bold"
+				Text="ENVIAR"
+				TextColor="White" />
+		</Grid>
+	</Grid>
+</ContentPage>

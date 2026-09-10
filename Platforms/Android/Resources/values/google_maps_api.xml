@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Substitua por uma chave com Maps SDK for Android (Google Cloud Console). -->
+	<string name="google_maps_key" translatable="false">AIzaSyBskqjvOX_XnwgtEQn2TJwy_grLXR5M_3o</string>
+</resources>

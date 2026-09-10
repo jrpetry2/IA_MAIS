@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+	<!-- Typography: align FontSize with Figma text styles -->
+	<Style x:Key="SaphPageTitle" TargetType="Label">
+		<Setter Property="FontFamily" Value="OpenSansSemibold" />
+		<Setter Property="FontSize" Value="22" />
+		<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SaphTextPrimary}, Dark={StaticResource SaphTextOnDark}}" />
+	</Style>
+
+	<Style x:Key="SaphSectionLabel" TargetType="Label">
+		<Setter Property="FontFamily" Value="OpenSansSemibold" />
+		<Setter Property="FontSize" Value="15" />
+		<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SaphTextPrimary}, Dark={StaticResource SaphTextOnDark}}" />
+	</Style>
+
+	<Style x:Key="SaphCaption" TargetType="Label">
+		<Setter Property="FontFamily" Value="OpenSansRegular" />
+		<Setter Property="FontSize" Value="13" />
+		<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SaphTextSecondary}, Dark={StaticResource SaphTextMutedDark}}" />
+	</Style>
+
+	<Style x:Key="SaphCard" TargetType="Border">
+		<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SaphSurface}, Dark={StaticResource SaphSurfaceDark}}" />
+		<Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource SaphBorder}, Dark={StaticResource SaphBorderDark}}" />
+		<Setter Property="StrokeThickness" Value="1" />
+		<Setter Property="Padding" Value="16,14" />
+		<Setter Property="StrokeShape">
+			<RoundRectangle CornerRadius="12" />
+		</Setter>
+	</Style>
+
+	<Style x:Key="SaphStatPill" TargetType="Border">
+		<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SaphSurface}, Dark={StaticResource SaphSurfaceDark}}" />
+		<Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource SaphBorder}, Dark={StaticResource SaphBorderDark}}" />
+		<Setter Property="StrokeThickness" Value="1" />
+		<Setter Property="Padding" Value="12,10" />
+		<Setter Property="StrokeShape">
+			<RoundRectangle CornerRadius="10" />
+		</Setter>
+	</Style>
+
+	<Style x:Key="SaphPrimaryButton" TargetType="Button">
+		<Setter Property="FontFamily" Value="OpenSansSemibold" />
+		<Setter Property="FontSize" Value="15" />
+		<Setter Property="TextColor" Value="{DynamicResource SaphOnAccent}" />
+		<Setter Property="BackgroundColor" Value="{DynamicResource SaphAccent}" />
+		<Setter Property="CornerRadius" Value="12" />
+		<Setter Property="Padding" Value="18,14" />
+		<Setter Property="MinimumHeightRequest" Value="48" />
+	</Style>
+</ResourceDictionary>

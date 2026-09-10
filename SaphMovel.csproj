@@ -1,0 +1,120 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+
+
+	<PropertyGroup>
+
+		<TargetFramework>net10.0-android</TargetFramework>
+
+
+
+		<OutputType>Exe</OutputType>
+
+		<RootNamespace>SaphMovel</RootNamespace>
+
+		<UseMaui>true</UseMaui>
+
+		<SingleProject>true</SingleProject>
+
+		<ImplicitUsings>enable</ImplicitUsings>
+
+		<Nullable>enable</Nullable>
+
+
+
+		<!-- Display name -->
+
+		<ApplicationTitle>SaphMovel</ApplicationTitle>
+
+
+
+		<!-- App Identifier -->
+
+		<ApplicationId>com.companyname.saphmovel</ApplicationId>
+
+
+
+		<!-- Versions -->
+
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+
+		<ApplicationVersion>1</ApplicationVersion>
+
+
+
+		<SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
+
+	</PropertyGroup>
+
+
+
+	<ItemGroup>
+
+		<!-- Logo SAPH Móvel (fundo preto do asset) -->
+
+		<MauiIcon Include="Resources\AppIcon\appicon.png" Color="#000000" />
+
+		<!-- Cor de fundo do fundo = única (sem variante luz/escuro no nativo). -->
+		<MauiSplashScreen Include="Resources\AppIcon\appicon.png" Color="#1DB2A5" BaseSize="192,192" />
+
+
+
+		<!-- Ícones da lista STATUS (resizetizer → ImageSource.FromFile em runtime) -->
+		<MauiImage Include="Resources\Images\*.png" Exclude="Resources\Images\status_aguardando_regulacao.png" Resize="True" BaseSize="48,48" />
+		<MauiImage Include="Resources\Images\status_aguardando_regulacao.png" Resize="True" BaseSize="400,200" />
+
+		<!-- Custom Fonts -->
+
+		<MauiFont Include="Resources\Fonts\*" />
+
+
+
+		<!-- Raw Assets: ZIP do modelo Vosk (nome descarregado ou renomeado — LogicalName = nome do ficheiro em Resources/Raw). -->
+		<MauiAsset Include="Resources\Raw\vosk-model-small-pt.zip" LogicalName="vosk-model-small-pt.zip" Condition="Exists('Resources\Raw\vosk-model-small-pt.zip')" />
+		<MauiAsset Include="Resources\Raw\vosk-model-small-pt-0.zip" LogicalName="vosk-model-small-pt-0.zip" Condition="Exists('Resources\Raw\vosk-model-small-pt-0.zip')" />
+		<MauiAsset Include="Resources\Raw\**" Exclude="Resources\Raw\vosk-model-small-pt.zip;Resources\Raw\vosk-model-small-pt-0.zip" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+
+	</ItemGroup>
+
+
+
+	<!-- Ferramentas locais + outros projetos na mesma pasta: não compilar como parte desta app -->
+	<ItemGroup>
+		<Compile Remove="tools\**\*" />
+		<None Include="tools\**\*" />
+		<Compile Remove="SaphStatus.Contracts\**\*.cs" />
+		<Compile Remove="SaphStatus.Api\**\*.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Vosk offline; JNI via Android.Runtime.JNIEnv (AndroidJavaObject não está no ref Mono.Android em .NET 10). -->
+		<AndroidMavenLibrary Include="com.alphacephei:vosk-android" Version="0.3.47" Bind="false" />
+		<!-- JNA: o .jar não inclui libjnidispatch.so para Android → UnsatisfiedLinkError. Usar o .aar (ArtifactFilename). -->
+		<AndroidMavenLibrary Include="net.java.dev.jna:jna" Version="5.13.0" Bind="false" ArtifactFilename="jna-5.13.0.aar" />
+	</ItemGroup>
+
+	<ItemGroup>
+
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Maps" Version="$(MauiVersion)" />
+
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+
+		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.0" />
+
+		<!-- Referência explícita: evita NoClassDefFoundError (SavedStateHandleSupport) com bindings/AAR. -->
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModel" Version="2.9.2.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModelSavedState" Version="2.9.2.1" />
+		<PackageReference Include="Xamarin.AndroidX.SavedState" Version="1.3.1.1" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="SaphStatus.Contracts\SaphStatus.Contracts.csproj" />
+	</ItemGroup>
+
+
+
+</Project>
+

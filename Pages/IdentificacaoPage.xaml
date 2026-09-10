@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	x:Class="SaphMovel.Pages.IdentificacaoPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	Title="Identificação"
+	BackgroundColor="#0F1211"
+	Shell.NavBarIsVisible="False">
+
+	<Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+		<!-- Barra topo -->
+		<Grid
+			Grid.Row="0"
+			Padding="4,8,12,8"
+			ColumnDefinitions="Auto,*"
+			BackgroundColor="#0F1211">
+			<Button
+				Grid.Column="0"
+				Padding="12,8"
+				BackgroundColor="Transparent"
+				Command="{Binding VoltarCommand}"
+				FontSize="22"
+				Text="←"
+				TextColor="White" />
+			<Label
+				Grid.Column="1"
+				FontAttributes="Bold"
+				FontSize="18"
+				Text="Identificação"
+				TextColor="White"
+				VerticalOptions="Center" />
+		</Grid>
+
+		<!-- Resumo paciente -->
+		<Border
+			Grid.Row="1"
+			Margin="16,4,16,0"
+			Padding="14,12"
+			BackgroundColor="#000000"
+			StrokeThickness="0">
+			<Border.StrokeShape>
+				<RoundRectangle CornerRadius="14" />
+			</Border.StrokeShape>
+			<HorizontalStackLayout Spacing="10">
+				<Label
+					FontSize="22"
+					Text="{Binding PatientEmoji}"
+					VerticalOptions="Center" />
+				<Label
+					FontAttributes="Bold"
+					FontSize="15"
+					Text="{Binding PatientSummary}"
+					TextColor="White"
+					VerticalOptions="Center" />
+			</HorizontalStackLayout>
+		</Border>
+
+		<Label
+			Grid.Row="2"
+			Margin="20,10,20,6"
+			FontSize="11"
+			Text="* CAMPO OBRIGATÓRIO"
+			TextColor="#E57373" />
+
+		<ScrollView Grid.Row="3">
+			<VerticalStackLayout Padding="16,0,16,24" Spacing="16">
+				<!-- Secção: Identificação do Paciente -->
+				<Grid ColumnDefinitions="Auto,*" BackgroundColor="#252B29" HeightRequest="44">
+					<BoxView
+						Grid.Column="0"
+						WidthRequest="4"
+						Color="#24B2A1"
+						VerticalOptions="Fill" />
+					<Label
+						Grid.Column="1"
+						Margin="12,0,0,0"
+						FontAttributes="Bold"
+						FontSize="14"
+						Text="Identificação do Paciente"
+						TextColor="White"
+						VerticalOptions="Center" />
+				</Grid>
+
+				<VerticalStackLayout Spacing="6">
+					<Label FontSize="12" Text="Nome *" TextColor="#B0B0B0" />
+					<Entry
+						BackgroundColor="#1E2422"
+						Placeholder="Nome completo"
+						PlaceholderColor="#6B7280"
+						Text="{Binding Form.Nome}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label FontSize="12" Text="Sexo *" TextColor="#B0B0B0" />
+					<Picker
+						Title="Selecione"
+						TitleColor="#9CA3AF"
+						BackgroundColor="#1E2422"
+						ItemsSource="{Binding SexoItems}"
+						SelectedItem="{Binding SexoPickerItem, Mode=TwoWay}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+					<VerticalStackLayout Grid.Column="0" Spacing="6">
+						<Label FontSize="12" Text="Idade *" TextColor="#B0B0B0" />
+						<Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+							<Entry
+								Grid.Column="0"
+								BackgroundColor="#1E2422"
+								Keyboard="Numeric"
+								Placeholder="0"
+								PlaceholderColor="#6B7280"
+								Text="{Binding Form.IdadeAnos}"
+								TextColor="White" />
+							<Border
+								Grid.Column="1"
+								Padding="10,0"
+								BackgroundColor="#2A3331"
+								StrokeThickness="0"
+								VerticalOptions="Center">
+								<Border.StrokeShape>
+									<RoundRectangle CornerRadius="6" />
+								</Border.StrokeShape>
+								<Label
+									FontSize="12"
+									Text="ANOS"
+									TextColor="#B0B0B0"
+									VerticalOptions="Center" />
+							</Border>
+						</Grid>
+					</VerticalStackLayout>
+					<VerticalStackLayout Grid.Column="1" Spacing="6">
+						<Label FontSize="12" Text=" " TextColor="#B0B0B0" />
+						<Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+							<Entry
+								Grid.Column="0"
+								BackgroundColor="#1E2422"
+								Keyboard="Numeric"
+								Placeholder="0"
+								PlaceholderColor="#6B7280"
+								Text="{Binding Form.IdadeMeses}"
+								TextColor="White" />
+							<Border
+								Grid.Column="1"
+								Padding="10,0"
+								BackgroundColor="#2A3331"
+								StrokeThickness="0"
+								VerticalOptions="Center">
+								<Border.StrokeShape>
+									<RoundRectangle CornerRadius="6" />
+								</Border.StrokeShape>
+								<Label
+									FontSize="12"
+									Text="MESES"
+									TextColor="#B0B0B0"
+									VerticalOptions="Center" />
+							</Border>
+						</Grid>
+					</VerticalStackLayout>
+				</Grid>
+
+				<!-- Paciente Ignorado -->
+				<Grid Margin="0,8,0,0" ColumnDefinitions="Auto,*" BackgroundColor="#252B29" HeightRequest="44">
+					<BoxView
+						Grid.Column="0"
+						WidthRequest="4"
+						Color="#24B2A1"
+						VerticalOptions="Fill" />
+					<Label
+						Grid.Column="1"
+						Margin="12,0,0,0"
+						FontAttributes="Bold"
+						FontSize="14"
+						Text="Paciente Ignorado"
+						TextColor="White"
+						VerticalOptions="Center" />
+				</Grid>
+
+				<VerticalStackLayout Spacing="6">
+					<Label FontSize="12" Text="CPF" TextColor="#B0B0B0" />
+					<Entry
+						BackgroundColor="#1E2422"
+						Keyboard="Numeric"
+						Placeholder="000.000.000-00"
+						PlaceholderColor="#6B7280"
+						Text="{Binding Form.Cpf}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label FontSize="12" Text="Cor" TextColor="#B0B0B0" />
+					<Picker
+						Title="Selecione"
+						TitleColor="#9CA3AF"
+						BackgroundColor="#1E2422"
+						ItemsSource="{Binding CorItems}"
+						SelectedItem="{Binding Form.Cor, Mode=TwoWay}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label FontSize="12" Text="Característica Física" TextColor="#B0B0B0" />
+					<Entry
+						BackgroundColor="#1E2422"
+						Placeholder="Descreva brevemente"
+						PlaceholderColor="#6B7280"
+						Text="{Binding Form.CaracteristicaFisica}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<!-- Paciente -->
+				<Grid Margin="0,8,0,0" ColumnDefinitions="Auto,*" BackgroundColor="#252B29" HeightRequest="44">
+					<BoxView
+						Grid.Column="0"
+						WidthRequest="4"
+						Color="#24B2A1"
+						VerticalOptions="Fill" />
+					<Label
+						Grid.Column="1"
+						Margin="12,0,0,0"
+						FontAttributes="Bold"
+						FontSize="14"
+						Text="Paciente"
+						TextColor="White"
+						VerticalOptions="Center" />
+				</Grid>
+
+				<VerticalStackLayout Spacing="6">
+					<Label FontSize="12" Text="Nome Social" TextColor="#B0B0B0" />
+					<Entry
+						BackgroundColor="#1E2422"
+						Placeholder="Nome social"
+						PlaceholderColor="#6B7280"
+						Text="{Binding Form.NomeSocial}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label FontSize="12" Text="Nome da Mãe" TextColor="#B0B0B0" />
+					<Entry
+						BackgroundColor="#1E2422"
+						Placeholder="Nome completo da mãe"
+						PlaceholderColor="#6B7280"
+						Text="{Binding Form.NomeMae}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label FontSize="12" Text="Data de Nascimento" TextColor="#B0B0B0" />
+					<Entry
+						BackgroundColor="#1E2422"
+						Placeholder="dd/mm/aaaa"
+						PlaceholderColor="#6B7280"
+						Text="{Binding Form.DataNascimentoText}"
+						TextColor="White" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="6">
+					<Label FontSize="12" Text="Alergias" TextColor="#B0B0B0" />
+					<Editor
+						AutoSize="TextChanges"
+						BackgroundColor="#1E2422"
+						MinimumHeightRequest="100"
+						Placeholder="Descreva alergias conhecidas"
+						PlaceholderColor="#6B7280"
+						Text="{Binding Form.Alergias}"
+						TextColor="White" />
+				</VerticalStackLayout>
+			</VerticalStackLayout>
+		</ScrollView>
+
+		<!-- Rodapé -->
+		<Grid
+			Grid.Row="4"
+			Padding="16,12,16,20"
+			ColumnDefinitions="*,*"
+			ColumnSpacing="12"
+			BackgroundColor="#0A0D0C">
+			<Button
+				Grid.Column="0"
+				Padding="12,14"
+				BackgroundColor="Transparent"
+				BorderColor="White"
+				BorderWidth="1"
+				Command="{Binding VoltarCommand}"
+				CornerRadius="10"
+				FontAttributes="Bold"
+				Text="VOLTAR"
+				TextColor="White" />
+			<Button
+				Grid.Column="1"
+				Padding="12,14"
+				BackgroundColor="#24B2A1"
+				Command="{Binding EnviarCommand}"
+				CornerRadius="10"
+				FontAttributes="Bold"
+				Text="ENVIAR"
+				TextColor="White" />
+		</Grid>
+	</Grid>
+</ContentPage>

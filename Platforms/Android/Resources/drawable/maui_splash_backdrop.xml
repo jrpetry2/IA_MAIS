@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fundo fixo; logótipo central (maui_splash_image — Resizetizer) -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
+	<item android:drawable="@color/maui_splash_color" />
+	<item android:drawable="@drawable/maui_splash_image" android:gravity="center" />
+</layer-list>

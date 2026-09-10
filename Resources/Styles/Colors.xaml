@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
+
+    <!-- SAPH MÓVEL semantic palette: replace hex values from Figma Variables / Inspect -->
+    <Color x:Key="SaphPageBackground">#F3F4F6</Color>
+    <Color x:Key="SaphPageBackgroundDark">#0B0B0C</Color>
+    <Color x:Key="SaphSurface">#FFFFFF</Color>
+    <Color x:Key="SaphSurfaceDark">#161618</Color>
+    <Color x:Key="SaphBorder">#E5E7EB</Color>
+    <Color x:Key="SaphBorderDark">#2A2A2E</Color>
+    <Color x:Key="SaphTextPrimary">#111827</Color>
+    <Color x:Key="SaphTextSecondary">#6B7280</Color>
+    <Color x:Key="SaphTextOnDark">#F9FAFB</Color>
+    <Color x:Key="SaphTextMutedDark">#9CA3AF</Color>
+    <Color x:Key="SaphAccent">#111827</Color>
+    <Color x:Key="SaphOnAccent">#FFFFFF</Color>
+    <Color x:Key="SaphStatusOk">#065F46</Color>
+    <Color x:Key="SaphStatusWarn">#92400E</Color>
+
+    <!-- STATUS screen (Figma / reference UI) -->
+    <Color x:Key="SaphHeaderBg">#1A1A1A</Color>
+    <Color x:Key="SaphBodyWhite">#FFFFFF</Color>
+    <Color x:Key="SaphOnActionButton">#FFFFFF</Color>
+    <Color x:Key="SaphTeal">#26A69A</Color>
+    <Color x:Key="SaphGreenStatus">#4CAF50</Color>
+    <Color x:Key="SaphUrgentRed">#D32F2F</Color>
+    <Color x:Key="SaphListDivider">#E0E0E0</Color>
+    <Color x:Key="SaphListTitle">#1A1A1A</Color>
+
+    <!-- Boletim APH tab -->
+    <Color x:Key="SaphBoletimHeaderMint">#E1F5F2</Color>
+    <Color x:Key="SaphBoletimTeal">#24B2A1</Color>
+    <Color x:Key="SaphBoletimSoftRow">#E1F5F2</Color>
+    <Color x:Key="SaphBoletimTitle">#1A1A1A</Color>
+    <Color x:Key="SaphBoletimSubtitle">#424242</Color>
+    <Color x:Key="SaphBoletimRegulationDot">#1976D2</Color>
+    <Color x:Key="SaphBoletimCheckGreen">#2E7D32</Color>
+    <Color x:Key="SaphBoletimCardStroke">#E0E0E0</Color>
+    <Color x:Key="SaphBoletimTabDivider">#CFCFCF</Color>
+
+    <!-- Cenas condicionais da aba STATUS -->
+    <Color x:Key="SaphStatusActionRed">#E30613</Color>
+    <Color x:Key="SaphStatusBlue">#2196F3</Color>
+    <Color x:Key="SaphStatusBlueStrong">#1976D2</Color>
+    <Color x:Key="SaphStatusGreenGo">#2DBE1B</Color>
+    <Color x:Key="SaphStatusGreenAlt">#32CD32</Color>
+    <Color x:Key="SaphStatusPillStroke">#E0E0E0</Color>
+    <Color x:Key="SaphStatusPrescriptionCard">#E1F5F2</Color>
+    <!-- Cena: Aguardando regulação (fundo + pílula) -->
+    <Color x:Key="SaphStatusRegulacaoCanvas">#000000</Color>
+    <Color x:Key="SaphStatusRegulacaoPill">#2C2C2C</Color>
+
+    <!-- Aba prescrição / mapa (tema escuro) -->
+    <Color x:Key="SaphPrescricaoCardBg">#1C1C1E</Color>
+    <Color x:Key="SaphPrescricaoPendente">#D32F2F</Color>
+    <Color x:Key="SaphPrescricaoMapBlue">#2196F3</Color>
+    <Color x:Key="SaphChamadoLabelMuted">#8E8E93</Color>
+    <Color x:Key="SaphChamadoTipBox">#E0F4F0</Color>
+    <Color x:Key="SaphChamadoMapPin">#D32F2F</Color>
+
+    <Color x:Key="Primary">#111827</Color>
+    <Color x:Key="PrimaryDark">#E5E7EB</Color>
+    <Color x:Key="PrimaryDarkText">#242424</Color>
+    <Color x:Key="Secondary">#DFD8F7</Color>
+    <Color x:Key="SecondaryDarkText">#9880e5</Color>
+    <Color x:Key="Tertiary">#2B0B98</Color>
+
+    <Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>
+    <Color x:Key="Magenta">#D600AA</Color>
+    <Color x:Key="MidnightBlue">#190649</Color>
+    <Color x:Key="OffBlack">#1f1f1f</Color>
+
+    <Color x:Key="Gray100">#E1E1E1</Color>
+    <Color x:Key="Gray200">#C8C8C8</Color>
+    <Color x:Key="Gray300">#ACACAC</Color>
+    <Color x:Key="Gray400">#919191</Color>
+    <Color x:Key="Gray500">#6E6E6E</Color>
+    <Color x:Key="Gray600">#404040</Color>
+    <Color x:Key="Gray900">#212121</Color>
+    <Color x:Key="Gray950">#141414</Color>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
+    <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
+    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}"/>
+
+    <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}"/>
+    <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}"/>
+    <SolidColorBrush x:Key="Gray300Brush" Color="{StaticResource Gray300}"/>
+    <SolidColorBrush x:Key="Gray400Brush" Color="{StaticResource Gray400}"/>
+    <SolidColorBrush x:Key="Gray500Brush" Color="{StaticResource Gray500}"/>
+    <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
+    <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
+    <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+</ResourceDictionary>

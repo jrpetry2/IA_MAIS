@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	x:Class="SaphMovel.Pages.AvaliacaoFinalPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	Title="Avaliação Final"
+	BackgroundColor="#0F1211"
+	Shell.NavBarIsVisible="False">
+
+	<Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+		<Grid
+			Grid.Row="0"
+			Padding="4,8,12,8"
+			ColumnDefinitions="Auto,*"
+			BackgroundColor="#000000">
+			<Button
+				Grid.Column="0"
+				Padding="12,8"
+				BackgroundColor="Transparent"
+				Command="{Binding VoltarCommand}"
+				FontSize="22"
+				Text="←"
+				TextColor="White" />
+			<Label
+				Grid.Column="1"
+				FontAttributes="Bold"
+				FontSize="18"
+				Text="Avaliação Final"
+				TextColor="White"
+				VerticalOptions="Center" />
+		</Grid>
+
+		<Border
+			Grid.Row="1"
+			Margin="16,8,16,0"
+			Padding="14,12"
+			BackgroundColor="#000000"
+			StrokeThickness="0">
+			<Border.StrokeShape>
+				<RoundRectangle CornerRadius="14" />
+			</Border.StrokeShape>
+			<HorizontalStackLayout Spacing="10">
+				<Label FontSize="22" Text="{Binding PatientEmoji}" VerticalOptions="Center" />
+				<Label
+					FontAttributes="Bold"
+					FontSize="15"
+					Text="{Binding PatientSummary}"
+					TextColor="White"
+					VerticalOptions="Center" />
+			</HorizontalStackLayout>
+		</Border>
+
+		<Label
+			Grid.Row="2"
+			Margin="20,10,20,6"
+			FontSize="11"
+			Text="* CAMPO OBRIGATÓRIO"
+			TextColor="#E57373" />
+
+		<ScrollView Grid.Row="3">
+			<VerticalStackLayout Padding="16,0,16,24" Spacing="16">
+				<Grid ColumnDefinitions="Auto,*" BackgroundColor="#252B29" HeightRequest="44">
+					<BoxView Grid.Column="0" WidthRequest="4" Color="#24B2A1" VerticalOptions="Fill" />
+					<Label
+						Grid.Column="1"
+						Margin="12,0,0,0"
+						FontAttributes="Bold"
+						FontSize="14"
+						Text="Avaliação Final"
+						TextColor="White"
+						VerticalOptions="Center" />
+				</Grid>
+
+				<Border
+					Padding="14,12"
+					BackgroundColor="#151918"
+					Stroke="#3D4A47"
+					StrokeThickness="1">
+					<Border.StrokeShape>
+						<RoundRectangle CornerRadius="12" />
+					</Border.StrokeShape>
+					<VerticalStackLayout Spacing="8">
+						<Label FontSize="13" Text="Avaliação Final" TextColor="White" />
+						<Editor
+							AutoSize="TextChanges"
+							BackgroundColor="#0F1211"
+							MinimumHeightRequest="120"
+							Placeholder="Descreva a avaliação final..."
+							PlaceholderColor="#6B7280"
+							Text="{Binding Form.TextoAvaliacao}"
+							TextColor="White" />
+					</VerticalStackLayout>
+				</Border>
+
+				<Border
+					Padding="14,12"
+					BackgroundColor="#151918"
+					Stroke="#3D4A47"
+					StrokeThickness="1">
+					<Border.StrokeShape>
+						<RoundRectangle CornerRadius="12" />
+					</Border.StrokeShape>
+					<VerticalStackLayout Spacing="10">
+						<Label
+							FontAttributes="Bold"
+							FontSize="13"
+							Text="Questão Tipo Radio *"
+							TextColor="White" />
+						<RadioButton
+							x:Name="Rb1"
+							CheckedChanged="OnRadioChecked"
+							Color="#24B2A1"
+							Content="Radio 1"
+							GroupName="QrAvalFinal"
+							TextColor="White"
+							Value="1" />
+						<RadioButton
+							x:Name="Rb2"
+							CheckedChanged="OnRadioChecked"
+							Color="#24B2A1"
+							Content="Radio 2"
+							GroupName="QrAvalFinal"
+							TextColor="White"
+							Value="2" />
+						<RadioButton
+							x:Name="Rb3"
+							CheckedChanged="OnRadioChecked"
+							Color="#24B2A1"
+							Content="Radio 3"
+							GroupName="QrAvalFinal"
+							TextColor="White"
+							Value="3" />
+						<RadioButton
+							x:Name="Rb4"
+							CheckedChanged="OnRadioChecked"
+							Color="#24B2A1"
+							Content="Radio 4"
+							GroupName="QrAvalFinal"
+							TextColor="White"
+							Value="4" />
+					</VerticalStackLayout>
+				</Border>
+
+				<Border
+					Padding="14,12"
+					BackgroundColor="#151918"
+					Stroke="#3D4A47"
+					StrokeThickness="1">
+					<Border.StrokeShape>
+						<RoundRectangle CornerRadius="12" />
+					</Border.StrokeShape>
+					<VerticalStackLayout Spacing="16">
+						<Label
+							FontAttributes="Bold"
+							FontSize="13"
+							Text="Questão Tipo Checkbox *"
+							TextColor="White" />
+						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+							<CheckBox
+								VerticalOptions="Start"
+								Color="#24B2A1"
+								IsChecked="{Binding Form.Checkbox1, Mode=TwoWay}" />
+							<VerticalStackLayout HorizontalOptions="Fill" Spacing="2" VerticalOptions="Center">
+								<Label
+									FontAttributes="Bold"
+									FontSize="14"
+									LineBreakMode="WordWrap"
+									Text="Situação clínica e desfecho"
+									TextColor="White" />
+								<Label
+									FontSize="12"
+									LineBreakMode="WordWrap"
+									Text="Registo completo do estado do paciente e resultado no local."
+									TextColor="#B0B0B0" />
+							</VerticalStackLayout>
+						</HorizontalStackLayout>
+						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+							<CheckBox
+								VerticalOptions="Start"
+								Color="#24B2A1"
+								IsChecked="{Binding Form.Checkbox2, Mode=TwoWay}" />
+							<VerticalStackLayout HorizontalOptions="Fill" Spacing="2" VerticalOptions="Center">
+								<Label
+									FontAttributes="Bold"
+									FontSize="14"
+									LineBreakMode="WordWrap"
+									Text="Condutas e procedimentos"
+									TextColor="White" />
+								<Label
+									FontSize="12"
+									LineBreakMode="WordWrap"
+									Text="Medicações, intervenções e curativos devidamente descritos."
+									TextColor="#B0B0B0" />
+							</VerticalStackLayout>
+						</HorizontalStackLayout>
+						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+							<CheckBox
+								VerticalOptions="Start"
+								Color="#24B2A1"
+								IsChecked="{Binding Form.Checkbox3, Mode=TwoWay}" />
+							<VerticalStackLayout HorizontalOptions="Fill" Spacing="2" VerticalOptions="Center">
+								<Label
+									FontAttributes="Bold"
+									FontSize="14"
+									LineBreakMode="WordWrap"
+									Text="Equipe e horários"
+									TextColor="White" />
+								<Label
+									FontSize="12"
+									LineBreakMode="WordWrap"
+									Text="Identificação da equipe e registo de chegada / saída conferidos."
+									TextColor="#B0B0B0" />
+							</VerticalStackLayout>
+						</HorizontalStackLayout>
+						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+							<CheckBox
+								VerticalOptions="Start"
+								Color="#24B2A1"
+								IsChecked="{Binding Form.Checkbox4, Mode=TwoWay}" />
+							<VerticalStackLayout HorizontalOptions="Fill" Spacing="2" VerticalOptions="Center">
+								<Label
+									FontAttributes="Bold"
+									FontSize="14"
+									LineBreakMode="WordWrap"
+									Text="Pendências e encaminhamento"
+									TextColor="White" />
+								<Label
+									FontSize="12"
+									LineBreakMode="WordWrap"
+									Text="Transferência, documentação entregue ou observações finais assinaladas."
+									TextColor="#B0B0B0" />
+							</VerticalStackLayout>
+						</HorizontalStackLayout>
+					</VerticalStackLayout>
+				</Border>
+			</VerticalStackLayout>
+		</ScrollView>
+
+		<Grid
+			Grid.Row="4"
+			Padding="16,12,16,20"
+			ColumnDefinitions="*,*"
+			ColumnSpacing="12"
+			BackgroundColor="#0A0D0C">
+			<Button
+				Grid.Column="0"
+				Padding="12,14"
+				BackgroundColor="Transparent"
+				BorderColor="#9CA3AF"
+				BorderWidth="1"
+				Command="{Binding VoltarCommand}"
+				CornerRadius="10"
+				FontAttributes="Bold"
+				Text="VOLTAR"
+				TextColor="White" />
+			<Button
+				Grid.Column="1"
+				Padding="12,14"
+				BackgroundColor="#24B2A1"
+				Command="{Binding EnviarCommand}"
+				CornerRadius="10"
+				FontAttributes="Bold"
+				Text="ENVIAR"
+				TextColor="White" />
+		</Grid>
+	</Grid>
+</ContentPage>

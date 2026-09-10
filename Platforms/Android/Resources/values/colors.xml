@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Fundo fixo do splash (único, independente de tema claro/escuro) -->
+	<color name="maui_splash_color">#1DB2A5</color>
+	<!-- Alinhado ao app (evita “sobra” do template na barra de sistema) -->
+	<color name="colorPrimary">#24B2A1</color>
+	<color name="colorPrimaryDark">#1A8A7C</color>
+	<color name="colorAccent">#24B2A1</color>
+</resources>

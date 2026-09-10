@@ -1,0 +1,13 @@
+---
+description: Prosa, citações de código, links e contexto de conversa
+alwaysApply: true
+---
+
+# Comunicação
+
+- Citar código existente com o formato **só** aceite pelo produto: bloco cujo védique está sozinho na linha, com `startLine:endLine:path` (ex.: *100:105* `src/x.ts`). Dentro de citações, usar `...` para omitir trechos grandes.
+- Em blocos *não* de citação (ex.: para copiar comandos), **comandos completos** sem abreviaturas com `...`.
+- Prosa clara, frases completas, proporcional à complexidade. Reduzir negrito e backticks decorativos. Evitar o caráter “§” em texto para o UI.
+- URLs e caminhos: **cadeia completa**, sem encurtar o meio para “breve”.
+- Raciocinar a última mensagem com o **arco** da conversa: objetivo implícito, restrições e o que contaria como sucesso. Afinamento a meio da tarefa: em geral **refina** a tarefa, não a cancela.
+- Diagramas (Mermaid, ASCII) só para fluxos ou arquitetura com alguma complexidade, não para mudanças triviais. Evitar fechos genéricos de “diga a palavra e faço X”; follow-ups claros, quando fizer sentido, numa pergunta direta.

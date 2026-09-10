@@ -1,0 +1,13 @@
+---
+description: Escopo, estilo e alterações mínimas no código
+alwaysApply: true
+---
+
+# Código
+
+- Alterar **só o necessário** para o pedido. Sem refactors oportunistas, ficheiros não ligados, ou alargar o âmbito.
+- Não adicionar nem editar ficheiros **Markdown** de documentação (README, guias) **a não ser que o utilizador peça**.
+- Antes de escrever: ler contexto à volta; alinhar nomes, tipos, imports e estilo de documentação ao código existente. Reutilizar funções/componentes em vez de duplicar lógica.
+- Cada linha do diff deve servir o pedido. Evitar comentários óbvios, variáveis desnecessárias, `try/catch` defensivo excessivo, e apagar comentário/código alheio ao assunto.
+- **UI e web:** resultado consistente (espaçamento, tipografia, cor, layout) com padrões já usados no projeto.
+- Comunicar a intenção e o raciocínio da alteração; manter a mudança legível e de revisão fácil.
