@@ -1,10 +1,7 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 namespace SaphMovel.Models;
 
 /// <summary>Estado em memória do formulário Identificação (Boletim APH).</summary>
-public sealed class IdentificacaoFormData : INotifyPropertyChanged
+public sealed class IdentificacaoFormData : ObservableModel
 {
 	string _nome = string.Empty;
 	string _sexo = string.Empty;
@@ -85,17 +82,20 @@ public sealed class IdentificacaoFormData : INotifyPropertyChanged
 		set => SetField(ref _alergias, value);
 	}
 
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	void OnPropertyChanged([CallerMemberName] string? name = null) =>
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-	bool SetField<T>(ref T field, T value, [CallerMemberName] string? name = null)
+	/// <summary>Limpa o formulário (novo atendimento / desvio de missão).</summary>
+	public void Reset()
 	{
-		if (EqualityComparer<T>.Default.Equals(field, value))
-			return false;
-		field = value;
-		OnPropertyChanged(name);
-		return true;
+		Nome = string.Empty;
+		Sexo = string.Empty;
+		IdadeAnos = string.Empty;
+		IdadeMeses = string.Empty;
+		Cpf = string.Empty;
+		Cor = string.Empty;
+		CaracteristicaFisica = string.Empty;
+		NomeSocial = string.Empty;
+		NomeMae = string.Empty;
+		DataNascimentoText = string.Empty;
+		Alergias = string.Empty;
 	}
+
 }

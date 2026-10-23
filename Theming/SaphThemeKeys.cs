@@ -18,4 +18,30 @@ public static class SaphThemeKeys
 	public const string Accent = "SaphAccent";
 	public const string OnAccent = "SaphOnAccent";
 	public const string OnActionButton = "SaphOnActionButton";
+	/// <summary>Fundo dos cartões CHAMADO / PRESCRIÇÃO (antes era StaticResource sempre escuro).</summary>
+	public const string PrescricaoCardBg = "SaphPrescricaoCardBg";
+
+	// Páginas modais (Boletim APH, Alterar Endereço, ferramentas): antes eram hex fixos escuros.
+	public const string ModalSurface = "SaphModalSurface";
+	public const string ModalHeaderBg = "SaphModalHeaderBg";
+	public const string ModalHeaderText = "SaphModalHeaderText";
+	public const string ModalCard = "SaphModalCard";
+	public const string ModalField = "SaphModalField";
+	public const string ModalFieldText = "SaphModalFieldText";
+	public const string ModalPlaceholder = "SaphModalPlaceholder";
+	public const string ModalStroke = "SaphModalStroke";
+	public const string ModalLabel = "SaphModalLabel";
+	public const string ModalFooterBg = "SaphModalFooterBg";
+	public const string ModalSectionHeaderBg = "SaphModalSectionHeaderBg";
+	public const string RequiredMark = "SaphRequiredMark";
+
+	// Bloco «OUVIR» (gravação press-hold e transcrição em curso).
+	public const string RecordingTint = "SaphRecordingTint";
+	public const string RecordingText = "SaphRecordingText";
+	public const string ProcessingTint = "SaphProcessingTint";
+	public const string ProcessingText = "SaphProcessingText";
+
+	// Cena STATUS «Aguardando regulação»: a ilustração tem fundo branco, logo o canvas segue o tema.
+	public const string StatusRegulacaoCanvas = "SaphStatusRegulacaoCanvas";
+	public const string StatusRegulacaoPill = "SaphStatusRegulacaoPill";
 }

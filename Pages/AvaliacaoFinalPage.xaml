@@ -3,232 +3,178 @@
 	x:Class="SaphMovel.Pages.AvaliacaoFinalPage"
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	Title="Avaliação Final"
-	BackgroundColor="#0F1211"
-	Shell.NavBarIsVisible="False">
+	xmlns:vm="clr-namespace:SaphMovel.ViewModels"
+	x:DataType="vm:AvaliacaoFinalViewModel"
+	Style="{StaticResource SaphModalPage}"
+	Title="Avaliação Final">
 
 	<Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
 		<Grid
 			Grid.Row="0"
-			Padding="4,8,12,8"
 			ColumnDefinitions="Auto,*"
-			BackgroundColor="#000000">
+			Style="{StaticResource SaphModalHeaderBar}">
 			<Button
 				Grid.Column="0"
-				Padding="12,8"
-				BackgroundColor="Transparent"
 				Command="{Binding VoltarCommand}"
-				FontSize="22"
-				Text="←"
-				TextColor="White" />
+				Style="{StaticResource SaphModalBackButton}"
+				Text="←" />
 			<Label
 				Grid.Column="1"
-				FontAttributes="Bold"
-				FontSize="18"
-				Text="Avaliação Final"
-				TextColor="White"
-				VerticalOptions="Center" />
+				Style="{StaticResource SaphModalTitle}"
+				Text="Avaliação Final" />
 		</Grid>
 
-		<Border
-			Grid.Row="1"
-			Margin="16,8,16,0"
-			Padding="14,12"
-			BackgroundColor="#000000"
-			StrokeThickness="0">
-			<Border.StrokeShape>
-				<RoundRectangle CornerRadius="14" />
-			</Border.StrokeShape>
+		<Border Grid.Row="1" Style="{StaticResource SaphPatientCard}">
 			<HorizontalStackLayout Spacing="10">
 				<Label FontSize="22" Text="{Binding PatientEmoji}" VerticalOptions="Center" />
-				<Label
-					FontAttributes="Bold"
-					FontSize="15"
-					Text="{Binding PatientSummary}"
-					TextColor="White"
-					VerticalOptions="Center" />
+				<Label Style="{StaticResource SaphPatientSummary}" Text="{Binding PatientSummary}" />
 			</HorizontalStackLayout>
 		</Border>
 
 		<Label
 			Grid.Row="2"
-			Margin="20,10,20,6"
-			FontSize="11"
-			Text="* CAMPO OBRIGATÓRIO"
-			TextColor="#E57373" />
+			Style="{StaticResource SaphRequiredHint}"
+			Text="* CAMPO OBRIGATÓRIO" />
 
 		<ScrollView Grid.Row="3">
 			<VerticalStackLayout Padding="16,0,16,24" Spacing="16">
-				<Grid ColumnDefinitions="Auto,*" BackgroundColor="#252B29" HeightRequest="44">
-					<BoxView Grid.Column="0" WidthRequest="4" Color="#24B2A1" VerticalOptions="Fill" />
+				<Grid ColumnDefinitions="Auto,*" Style="{StaticResource SaphSectionHeaderBar}">
+					<BoxView
+						Grid.Column="0"
+						WidthRequest="4"
+						Color="{StaticResource SaphBoletimTeal}"
+						VerticalOptions="Fill" />
 					<Label
 						Grid.Column="1"
-						Margin="12,0,0,0"
-						FontAttributes="Bold"
-						FontSize="14"
-						Text="Avaliação Final"
-						TextColor="White"
-						VerticalOptions="Center" />
+						Margin="12,0,12,0"
+						Style="{StaticResource SaphSectionHeaderTitle}"
+						Text="Avaliação Final" />
 				</Grid>
 
-				<Border
-					Padding="14,12"
-					BackgroundColor="#151918"
-					Stroke="#3D4A47"
-					StrokeThickness="1">
-					<Border.StrokeShape>
-						<RoundRectangle CornerRadius="12" />
-					</Border.StrokeShape>
+				<Border Style="{StaticResource SaphModalSectionCard}">
 					<VerticalStackLayout Spacing="8">
-						<Label FontSize="13" Text="Avaliação Final" TextColor="White" />
+						<Label
+							FontSize="13"
+							Style="{StaticResource SaphFieldCaption}"
+							Text="Avaliação Final" />
 						<Editor
 							AutoSize="TextChanges"
-							BackgroundColor="#0F1211"
 							MinimumHeightRequest="120"
 							Placeholder="Descreva a avaliação final..."
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.TextoAvaliacao}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEditor}"
+							Text="{Binding Form.TextoAvaliacao}" />
 					</VerticalStackLayout>
 				</Border>
 
-				<Border
-					Padding="14,12"
-					BackgroundColor="#151918"
-					Stroke="#3D4A47"
-					StrokeThickness="1">
-					<Border.StrokeShape>
-						<RoundRectangle CornerRadius="12" />
-					</Border.StrokeShape>
+				<Border Style="{StaticResource SaphModalSectionCard}">
 					<VerticalStackLayout Spacing="10">
 						<Label
-							FontAttributes="Bold"
 							FontSize="13"
-							Text="Questão Tipo Radio *"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldCaptionStrong}"
+							Text="Questão Tipo Radio *" />
 						<RadioButton
 							x:Name="Rb1"
 							CheckedChanged="OnRadioChecked"
-							Color="#24B2A1"
+							Color="{StaticResource SaphBoletimTeal}"
 							Content="Radio 1"
 							GroupName="QrAvalFinal"
-							TextColor="White"
+							TextColor="{DynamicResource SaphModalFieldText}"
 							Value="1" />
 						<RadioButton
 							x:Name="Rb2"
 							CheckedChanged="OnRadioChecked"
-							Color="#24B2A1"
+							Color="{StaticResource SaphBoletimTeal}"
 							Content="Radio 2"
 							GroupName="QrAvalFinal"
-							TextColor="White"
+							TextColor="{DynamicResource SaphModalFieldText}"
 							Value="2" />
 						<RadioButton
 							x:Name="Rb3"
 							CheckedChanged="OnRadioChecked"
-							Color="#24B2A1"
+							Color="{StaticResource SaphBoletimTeal}"
 							Content="Radio 3"
 							GroupName="QrAvalFinal"
-							TextColor="White"
+							TextColor="{DynamicResource SaphModalFieldText}"
 							Value="3" />
 						<RadioButton
 							x:Name="Rb4"
 							CheckedChanged="OnRadioChecked"
-							Color="#24B2A1"
+							Color="{StaticResource SaphBoletimTeal}"
 							Content="Radio 4"
 							GroupName="QrAvalFinal"
-							TextColor="White"
+							TextColor="{DynamicResource SaphModalFieldText}"
 							Value="4" />
 					</VerticalStackLayout>
 				</Border>
 
-				<Border
-					Padding="14,12"
-					BackgroundColor="#151918"
-					Stroke="#3D4A47"
-					StrokeThickness="1">
-					<Border.StrokeShape>
-						<RoundRectangle CornerRadius="12" />
-					</Border.StrokeShape>
+				<Border Style="{StaticResource SaphModalSectionCard}">
 					<VerticalStackLayout Spacing="16">
 						<Label
-							FontAttributes="Bold"
 							FontSize="13"
-							Text="Questão Tipo Checkbox *"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldCaptionStrong}"
+							Text="Questão Tipo Checkbox *" />
 						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
 							<CheckBox
 								VerticalOptions="Start"
-								Color="#24B2A1"
+								Color="{StaticResource SaphBoletimTeal}"
 								IsChecked="{Binding Form.Checkbox1, Mode=TwoWay}" />
 							<VerticalStackLayout HorizontalOptions="Fill" Spacing="2" VerticalOptions="Center">
 								<Label
-									FontAttributes="Bold"
 									FontSize="14"
-									LineBreakMode="WordWrap"
-									Text="Situação clínica e desfecho"
-									TextColor="White" />
+									Style="{StaticResource SaphFieldCaptionStrong}"
+									Text="Situação clínica e desfecho" />
 								<Label
-									FontSize="12"
 									LineBreakMode="WordWrap"
-									Text="Registo completo do estado do paciente e resultado no local."
-									TextColor="#B0B0B0" />
+									Style="{StaticResource SaphFieldCaption}"
+									Text="Registo completo do estado do paciente e resultado no local." />
 							</VerticalStackLayout>
 						</HorizontalStackLayout>
 						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
 							<CheckBox
 								VerticalOptions="Start"
-								Color="#24B2A1"
+								Color="{StaticResource SaphBoletimTeal}"
 								IsChecked="{Binding Form.Checkbox2, Mode=TwoWay}" />
 							<VerticalStackLayout HorizontalOptions="Fill" Spacing="2" VerticalOptions="Center">
 								<Label
-									FontAttributes="Bold"
 									FontSize="14"
-									LineBreakMode="WordWrap"
-									Text="Condutas e procedimentos"
-									TextColor="White" />
+									Style="{StaticResource SaphFieldCaptionStrong}"
+									Text="Condutas e procedimentos" />
 								<Label
-									FontSize="12"
 									LineBreakMode="WordWrap"
-									Text="Medicações, intervenções e curativos devidamente descritos."
-									TextColor="#B0B0B0" />
+									Style="{StaticResource SaphFieldCaption}"
+									Text="Medicações, intervenções e curativos devidamente descritos." />
 							</VerticalStackLayout>
 						</HorizontalStackLayout>
 						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
 							<CheckBox
 								VerticalOptions="Start"
-								Color="#24B2A1"
+								Color="{StaticResource SaphBoletimTeal}"
 								IsChecked="{Binding Form.Checkbox3, Mode=TwoWay}" />
 							<VerticalStackLayout HorizontalOptions="Fill" Spacing="2" VerticalOptions="Center">
 								<Label
-									FontAttributes="Bold"
 									FontSize="14"
-									LineBreakMode="WordWrap"
-									Text="Equipe e horários"
-									TextColor="White" />
+									Style="{StaticResource SaphFieldCaptionStrong}"
+									Text="Equipe e horários" />
 								<Label
-									FontSize="12"
 									LineBreakMode="WordWrap"
-									Text="Identificação da equipe e registo de chegada / saída conferidos."
-									TextColor="#B0B0B0" />
+									Style="{StaticResource SaphFieldCaption}"
+									Text="Identificação da equipe e registo de chegada / saída conferidos." />
 							</VerticalStackLayout>
 						</HorizontalStackLayout>
 						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
 							<CheckBox
 								VerticalOptions="Start"
-								Color="#24B2A1"
+								Color="{StaticResource SaphBoletimTeal}"
 								IsChecked="{Binding Form.Checkbox4, Mode=TwoWay}" />
 							<VerticalStackLayout HorizontalOptions="Fill" Spacing="2" VerticalOptions="Center">
 								<Label
-									FontAttributes="Bold"
 									FontSize="14"
-									LineBreakMode="WordWrap"
-									Text="Pendências e encaminhamento"
-									TextColor="White" />
+									Style="{StaticResource SaphFieldCaptionStrong}"
+									Text="Pendências e encaminhamento" />
 								<Label
-									FontSize="12"
 									LineBreakMode="WordWrap"
-									Text="Transferência, documentação entregue ou observações finais assinaladas."
-									TextColor="#B0B0B0" />
+									Style="{StaticResource SaphFieldCaption}"
+									Text="Transferência, documentação entregue ou observações finais assinaladas." />
 							</VerticalStackLayout>
 						</HorizontalStackLayout>
 					</VerticalStackLayout>
@@ -238,30 +184,20 @@
 
 		<Grid
 			Grid.Row="4"
-			Padding="16,12,16,20"
 			ColumnDefinitions="*,*"
-			ColumnSpacing="12"
-			BackgroundColor="#0A0D0C">
+			Style="{StaticResource SaphModalFooterBar}">
 			<Button
 				Grid.Column="0"
-				Padding="12,14"
-				BackgroundColor="Transparent"
-				BorderColor="#9CA3AF"
-				BorderWidth="1"
 				Command="{Binding VoltarCommand}"
-				CornerRadius="10"
-				FontAttributes="Bold"
-				Text="VOLTAR"
-				TextColor="White" />
+				SemanticProperties.Description="Voltar sem guardar"
+				Style="{StaticResource SaphSecondaryActionButton}"
+				Text="VOLTAR" />
 			<Button
 				Grid.Column="1"
-				Padding="12,14"
-				BackgroundColor="#24B2A1"
 				Command="{Binding EnviarCommand}"
-				CornerRadius="10"
-				FontAttributes="Bold"
-				Text="ENVIAR"
-				TextColor="White" />
+				SemanticProperties.Description="Enviar avaliação final"
+				Style="{StaticResource SaphActionButton}"
+				Text="ENVIAR" />
 		</Grid>
 	</Grid>
 </ContentPage>

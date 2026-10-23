@@ -18,6 +18,9 @@ static class VoskJni
 	static IntPtr _ctorRecognizer = IntPtr.Zero;
 	static IntPtr _acceptWaveForm = IntPtr.Zero;
 	static IntPtr _getResult = IntPtr.Zero;
+	static IntPtr _ctorRecognizerGrammar = IntPtr.Zero;
+	static IntPtr _reset = IntPtr.Zero;
+	static IntPtr _setWords = IntPtr.Zero;
 
 	internal static void EnsureReady()
 	{
@@ -40,6 +43,9 @@ static class VoskJni
 			_ctorRecognizer = JNIEnv.GetMethodID(_recognizerClass, "<init>", "(Lorg/vosk/Model;F)V");
 			_acceptWaveForm = JNIEnv.GetMethodID(_recognizerClass, "acceptWaveForm", "([SI)Z");
 			_getResult = JNIEnv.GetMethodID(_recognizerClass, "getResult", "()Ljava/lang/String;");
+			_ctorRecognizerGrammar = JNIEnv.GetMethodID(_recognizerClass, "<init>", "(Lorg/vosk/Model;FLjava/lang/String;)V");
+			_reset = JNIEnv.GetMethodID(_recognizerClass, "reset", "()V");
+			_setWords = JNIEnv.GetMethodID(_recognizerClass, "setWords", "(Z)V");
 
 			_ready = true;
 		}
@@ -73,6 +79,43 @@ static class VoskJni
 		IntPtr g = JNIEnv.NewGlobalRef(local);
 		JNIEnv.DeleteLocalRef(local);
 		return g;
+	}
+
+	/// <summary>Reconhecedor restrito a uma gramática JSON (array de frases, com «[unk]»).</summary>
+	public static IntPtr CreateRecognizer(IntPtr modelGlobal, float sampleRate, string grammarJson)
+	{
+		EnsureReady();
+		IntPtr jGrammar = JNIEnv.NewString(grammarJson);
+		try
+		{
+			IntPtr local = JNIEnv.NewObject(
+				_recognizerClass,
+				_ctorRecognizerGrammar,
+				new JValue(modelGlobal),
+				new JValue(sampleRate),
+				new JValue(jGrammar));
+			IntPtr g = JNIEnv.NewGlobalRef(local);
+			JNIEnv.DeleteLocalRef(local);
+			return g;
+		}
+		finally
+		{
+			JNIEnv.DeleteLocalRef(jGrammar);
+		}
+	}
+
+	/// <summary>Descarta o áudio acumulado (ex.: eco do TTS) e recomeça a frase.</summary>
+	public static void Reset(IntPtr recognizerGlobal)
+	{
+		EnsureReady();
+		JNIEnv.CallVoidMethod(recognizerGlobal, _reset);
+	}
+
+	/// <summary>Inclui no resultado a lista de palavras com confiança («result»: [{word, conf, …}]).</summary>
+	public static void SetWords(IntPtr recognizerGlobal, bool words)
+	{
+		EnsureReady();
+		JNIEnv.CallVoidMethod(recognizerGlobal, _setWords, new JValue(words));
 	}
 
 	public static bool AcceptWaveForm(IntPtr recognizerGlobal, short[] pcmSlice)

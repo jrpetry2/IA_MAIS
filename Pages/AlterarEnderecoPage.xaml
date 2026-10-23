@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	x:Class="SaphMovel.Pages.AlterarEnderecoPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:controls="clr-namespace:SaphMovel.Controls"
+	xmlns:vm="clr-namespace:SaphMovel.ViewModels"
+	x:DataType="vm:AlterarEnderecoViewModel"
+	Style="{StaticResource SaphModalPage}"
+	Title="Alterar Endereço">
+
+	<Grid RowDefinitions="Auto,*,Auto">
+		<Grid
+			Grid.Row="0"
+			ColumnDefinitions="Auto,*"
+			Style="{StaticResource SaphModalHeaderBar}">
+			<Button
+				Grid.Column="0"
+				Command="{Binding VoltarCommand}"
+				Style="{StaticResource SaphModalBackButton}"
+				Text="←" />
+			<Label
+				Grid.Column="1"
+				Style="{StaticResource SaphModalTitle}"
+				Text="Alterar Endereço" />
+		</Grid>
+
+		<ScrollView Grid.Row="1">
+			<VerticalStackLayout Padding="16,12,16,24" Spacing="14">
+				<Label
+					FontSize="12"
+					LineBreakMode="WordWrap"
+					Text="Dite o endereço completo com OUVIR, ou edite os campos manualmente."
+					TextColor="{DynamicResource SaphTextSecondary}" />
+
+				<VerticalStackLayout Spacing="4">
+					<Label Style="{StaticResource SaphFieldCaption}" Text="Cidade" />
+					<Entry
+						Placeholder="—"
+						Style="{StaticResource SaphFieldEntry}"
+						Text="{Binding Form.Cidade}" />
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Spacing="4">
+					<Label Style="{StaticResource SaphFieldCaption}" Text="Logradouro" />
+					<Entry
+						Placeholder="—"
+						Style="{StaticResource SaphFieldEntry}"
+						Text="{Binding Form.Logradouro}" />
+				</VerticalStackLayout>
+
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+					<VerticalStackLayout Grid.Column="0" Spacing="4">
+						<Label Style="{StaticResource SaphFieldCaption}" Text="Número" />
+						<Entry
+							Placeholder="—"
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Numero}" />
+					</VerticalStackLayout>
+					<VerticalStackLayout Grid.Column="1" Spacing="4">
+						<Label Style="{StaticResource SaphFieldCaption}" Text="Bairro" />
+						<Entry
+							Placeholder="—"
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Bairro}" />
+					</VerticalStackLayout>
+				</Grid>
+
+				<VerticalStackLayout Spacing="4">
+					<Label Style="{StaticResource SaphFieldCaption}" Text="Referência" />
+					<Editor
+						AutoSize="TextChanges"
+						MinimumHeightRequest="80"
+						Placeholder="Ponto de referência…"
+						Style="{StaticResource SaphFieldEditor}"
+						Text="{Binding Form.Referencia}" />
+				</VerticalStackLayout>
+
+				<controls:OuvirPanel x:Name="OuvirPanel" />
+			</VerticalStackLayout>
+		</ScrollView>
+
+		<Grid
+			Grid.Row="2"
+			ColumnDefinitions="*,*"
+			Style="{StaticResource SaphModalFooterBar}">
+			<Button
+				Grid.Column="0"
+				Command="{Binding VoltarCommand}"
+				SemanticProperties.Description="Voltar sem guardar"
+				Style="{StaticResource SaphSecondaryActionButton}"
+				Text="VOLTAR" />
+			<Button
+				Grid.Column="1"
+				Command="{Binding AtualizarCommand}"
+				SemanticProperties.Description="Atualizar endereço do chamado"
+				Style="{StaticResource SaphActionButton}"
+				Text="ATUALIZAR" />
+		</Grid>
+	</Grid>
+</ContentPage>

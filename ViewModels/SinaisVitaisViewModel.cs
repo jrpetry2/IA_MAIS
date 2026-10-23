@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using SaphMovel.Models;
@@ -9,12 +7,12 @@ using SaphMovel.Services.SinaisVitais;
 
 namespace SaphMovel.ViewModels;
 
-public sealed class SinaisVitaisViewModel : INotifyPropertyChanged
+public sealed class SinaisVitaisViewModel : ObservableModel
 {
 	readonly MainViewModel _main;
 	readonly Page _page;
 	readonly IPressHoldAudioRecordService _recorder;
-	readonly IOpenAiVitalsTranscriptionService _transcription;
+	readonly IOpenAiTranscriptionService _transcription;
 	bool _isOuvirRecording;
 	bool _isTranscribing;
 	int _transcriptionGeneration;
@@ -32,20 +30,14 @@ public sealed class SinaisVitaisViewModel : INotifyPropertyChanged
 
 	public bool IsTranscribing => _isTranscribing;
 
-	public bool IsOuvirBusy => _isOuvirRecording || _isTranscribing;
-
-	public bool ShowOuvirStatus => _isOuvirRecording || _isTranscribing;
-
 	public ICommand VoltarCommand { get; }
 	public ICommand EnviarCommand { get; }
-
-	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public SinaisVitaisViewModel(
 		MainViewModel main,
 		Page page,
 		IPressHoldAudioRecordService recorder,
-		IOpenAiVitalsTranscriptionService transcription)
+		IOpenAiTranscriptionService transcription)
 	{
 		_main = main;
 		_page = page;
@@ -170,8 +162,6 @@ public sealed class SinaisVitaisViewModel : INotifyPropertyChanged
 			return;
 		_isTranscribing = transcribing;
 		OnPropertyChanged(nameof(IsTranscribing));
-		OnPropertyChanged(nameof(IsOuvirBusy));
-		OnPropertyChanged(nameof(ShowOuvirStatus));
 		OnPropertyChanged(nameof(OuvirHintText));
 	}
 
@@ -182,12 +172,7 @@ public sealed class SinaisVitaisViewModel : INotifyPropertyChanged
 		_isOuvirRecording = recording;
 		OnPropertyChanged(nameof(IsOuvirRecording));
 		OnPropertyChanged(nameof(OuvirHintText));
-		OnPropertyChanged(nameof(IsOuvirBusy));
-		OnPropertyChanged(nameof(ShowOuvirStatus));
 	}
-
-	void OnPropertyChanged([CallerMemberName] string? name = null) =>
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
 	public void OnPageAppearing()
 	{

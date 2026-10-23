@@ -1,10 +1,7 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 namespace SaphMovel.Models;
 
 /// <summary>Estado em memória do formulário Avaliação Final (Boletim APH).</summary>
-public sealed class AvaliacaoFinalFormData : INotifyPropertyChanged
+public sealed class AvaliacaoFinalFormData : ObservableModel
 {
 	string _textoAvaliacao = string.Empty;
 	string _questaoRadio = string.Empty;
@@ -50,17 +47,15 @@ public sealed class AvaliacaoFinalFormData : INotifyPropertyChanged
 		set => SetField(ref _checkbox4, value);
 	}
 
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	void OnPropertyChanged([CallerMemberName] string? name = null) =>
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-	bool SetField<T>(ref T field, T value, [CallerMemberName] string? name = null)
+	/// <summary>Limpa o formulário (novo atendimento / desvio de missão).</summary>
+	public void Reset()
 	{
-		if (EqualityComparer<T>.Default.Equals(field, value))
-			return false;
-		field = value;
-		OnPropertyChanged(name);
-		return true;
+		TextoAvaliacao = string.Empty;
+		QuestaoRadio = string.Empty;
+		Checkbox1 = false;
+		Checkbox2 = false;
+		Checkbox3 = false;
+		Checkbox4 = false;
 	}
+
 }

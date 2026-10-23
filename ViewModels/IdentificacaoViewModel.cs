@@ -1,13 +1,12 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using SaphMovel.Models;
 
 namespace SaphMovel.ViewModels;
 
-public sealed class IdentificacaoViewModel : INotifyPropertyChanged
+public sealed class IdentificacaoViewModel : ObservableModel
 {
 	readonly MainViewModel _main;
 	readonly Page _page;
@@ -95,9 +94,4 @@ public sealed class IdentificacaoViewModel : INotifyPropertyChanged
 			return "Indique a idade em anos (número válido).";
 		return null;
 	}
-
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	void OnPropertyChanged([CallerMemberName] string? name = null) =>
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

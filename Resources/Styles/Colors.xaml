@@ -6,8 +6,6 @@
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
     <!-- SAPH MÓVEL semantic palette: replace hex values from Figma Variables / Inspect -->
-    <Color x:Key="SaphPageBackground">#F3F4F6</Color>
-    <Color x:Key="SaphPageBackgroundDark">#0B0B0C</Color>
     <Color x:Key="SaphSurface">#FFFFFF</Color>
     <Color x:Key="SaphSurfaceDark">#161618</Color>
     <Color x:Key="SaphBorder">#E5E7EB</Color>
@@ -18,14 +16,10 @@
     <Color x:Key="SaphTextMutedDark">#9CA3AF</Color>
     <Color x:Key="SaphAccent">#111827</Color>
     <Color x:Key="SaphOnAccent">#FFFFFF</Color>
-    <Color x:Key="SaphStatusOk">#065F46</Color>
-    <Color x:Key="SaphStatusWarn">#92400E</Color>
 
     <!-- STATUS screen (Figma / reference UI) -->
-    <Color x:Key="SaphHeaderBg">#1A1A1A</Color>
     <Color x:Key="SaphBodyWhite">#FFFFFF</Color>
     <Color x:Key="SaphOnActionButton">#FFFFFF</Color>
-    <Color x:Key="SaphTeal">#26A69A</Color>
     <Color x:Key="SaphGreenStatus">#4CAF50</Color>
     <Color x:Key="SaphUrgentRed">#D32F2F</Color>
     <Color x:Key="SaphListDivider">#E0E0E0</Color>
@@ -45,22 +39,55 @@
     <!-- Cenas condicionais da aba STATUS -->
     <Color x:Key="SaphStatusActionRed">#E30613</Color>
     <Color x:Key="SaphStatusBlue">#2196F3</Color>
-    <Color x:Key="SaphStatusBlueStrong">#1976D2</Color>
     <Color x:Key="SaphStatusGreenGo">#2DBE1B</Color>
-    <Color x:Key="SaphStatusGreenAlt">#32CD32</Color>
     <Color x:Key="SaphStatusPillStroke">#E0E0E0</Color>
     <Color x:Key="SaphStatusPrescriptionCard">#E1F5F2</Color>
-    <!-- Cena: Aguardando regulação (fundo + pílula) -->
-    <Color x:Key="SaphStatusRegulacaoCanvas">#000000</Color>
-    <Color x:Key="SaphStatusRegulacaoPill">#2C2C2C</Color>
+    <Color x:Key="SaphStatusUnknown">#757575</Color>
+    <!-- Cena: Aguardando regulação — default claro; SaphThemePalette sobrescreve em modo escuro -->
+    <Color x:Key="SaphStatusRegulacaoCanvas">#FFFFFF</Color>
+    <Color x:Key="SaphStatusRegulacaoPill">#F2F2F7</Color>
 
-    <!-- Aba prescrição / mapa (tema escuro) -->
-    <Color x:Key="SaphPrescricaoCardBg">#1C1C1E</Color>
+    <!-- Faixa de estado da voz offline (a ouvir / aviso / modelo pronto) -->
+    <Color x:Key="SaphVoiceActiveTint">#1A2DBE1B</Color>
+    <Color x:Key="SaphVoiceWarnTint">#33FFB020</Color>
+    <Color x:Key="SaphVoiceInfoTint">#331996F6</Color>
+    <Color x:Key="SaphVoiceWarnDot">#CC8800</Color>
+    <Color x:Key="SaphStatusGreenAlt">#32CD32</Color>
+
+    <!-- Cartões CHAMADO/PRESCRIÇÃO: default claro; SaphThemePalette sobrescreve em modo escuro -->
+    <Color x:Key="SaphPrescricaoCardBg">#F2F2F7</Color>
     <Color x:Key="SaphPrescricaoPendente">#D32F2F</Color>
     <Color x:Key="SaphPrescricaoMapBlue">#2196F3</Color>
-    <Color x:Key="SaphChamadoLabelMuted">#8E8E93</Color>
     <Color x:Key="SaphChamadoTipBox">#E0F4F0</Color>
     <Color x:Key="SaphChamadoMapPin">#D32F2F</Color>
+
+    <!-- Páginas modais: default claro; SaphThemePalette sobrescreve em modo escuro -->
+    <Color x:Key="SaphModalSurface">#FFFFFF</Color>
+    <Color x:Key="SaphModalHeaderBg">#E1F5F2</Color>
+    <Color x:Key="SaphModalHeaderText">#1A1A1A</Color>
+    <Color x:Key="SaphModalCard">#F2F2F7</Color>
+    <Color x:Key="SaphModalField">#EFEFF4</Color>
+    <Color x:Key="SaphModalFieldText">#111827</Color>
+    <Color x:Key="SaphModalPlaceholder">#9CA3AF</Color>
+    <Color x:Key="SaphModalStroke">#D8D8D8</Color>
+    <Color x:Key="SaphModalLabel">#424242</Color>
+    <Color x:Key="SaphModalFooterBg">#F2F2F7</Color>
+    <Color x:Key="SaphModalSectionHeaderBg">#E1F5F2</Color>
+    <Color x:Key="SaphRequiredMark">#C62828</Color>
+
+    <!-- Área de assinatura (folha sempre clara, independente do tema) -->
+    <Color x:Key="SaphSignatureSheet">#D8D8D8</Color>
+    <Color x:Key="SaphSignatureCanvas">#FFFFFF</Color>
+    <Color x:Key="SaphSignatureInk">#1F2937</Color>
+    <Color x:Key="SaphSignatureHint">#374151</Color>
+    <Color x:Key="SaphSignatureRule">#6B7280</Color>
+
+    <!-- Bloco OUVIR (gravação / transcrição) -->
+    <Color x:Key="SaphRecordingTint">#1AC62828</Color>
+    <Color x:Key="SaphRecordingStroke">#C62828</Color>
+    <Color x:Key="SaphRecordingText">#B71C1C</Color>
+    <Color x:Key="SaphProcessingTint">#1A24B2A1</Color>
+    <Color x:Key="SaphProcessingText">#00695C</Color>
 
     <Color x:Key="Primary">#111827</Color>
     <Color x:Key="PrimaryDark">#E5E7EB</Color>

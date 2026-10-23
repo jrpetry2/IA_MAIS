@@ -3,198 +3,158 @@
 	x:Class="SaphMovel.Pages.ImpressaoBoletimPage"
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	Title="Impressão do Boletim"
-	BackgroundColor="#000000"
-	Shell.NavBarIsVisible="False">
+	xmlns:vm="clr-namespace:SaphMovel.ViewModels"
+	x:DataType="vm:ImpressaoBoletimViewModel"
+	Style="{StaticResource SaphModalPage}"
+	Title="Impressão do Boletim">
 
 	<!-- Assinatura fora do ScrollView: senão o gesto vertical dispara a rolagem em vez de pintar. -->
 	<Grid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto">
 		<Grid
 			Grid.Row="0"
-			Padding="4,8,12,8"
 			ColumnDefinitions="Auto,*"
-			BackgroundColor="#000000">
+			Style="{StaticResource SaphModalHeaderBar}">
 			<Button
 				Grid.Column="0"
-				Padding="12,8"
-				BackgroundColor="Transparent"
 				Command="{Binding VoltarCommand}"
-				FontSize="22"
-				Text="←"
-				TextColor="White" />
+				Style="{StaticResource SaphModalBackButton}"
+				Text="←" />
 			<Label
 				Grid.Column="1"
-				FontAttributes="Bold"
-				FontSize="17"
-				LineBreakMode="WordWrap"
-				Text="Impressão do Boletim"
-				TextColor="White"
-				VerticalOptions="Center" />
+				Style="{StaticResource SaphModalTitle}"
+				Text="Impressão do Boletim" />
 		</Grid>
 
-		<Border
-			Grid.Row="1"
-			Margin="16,8,16,0"
-			Padding="14,12"
-			BackgroundColor="#000000"
-			StrokeThickness="0">
-			<Border.StrokeShape>
-				<RoundRectangle CornerRadius="14" />
-			</Border.StrokeShape>
+		<Border Grid.Row="1" Style="{StaticResource SaphPatientCard}">
 			<HorizontalStackLayout Spacing="10">
 				<Label FontSize="22" Text="{Binding PatientEmoji}" VerticalOptions="Center" />
-				<Label
-					FontAttributes="Bold"
-					FontSize="15"
-					Text="{Binding PatientSummary}"
-					TextColor="White"
-					VerticalOptions="Center" />
+				<Label Style="{StaticResource SaphPatientSummary}" Text="{Binding PatientSummary}" />
 			</HorizontalStackLayout>
 		</Border>
 
 		<Label
 			Grid.Row="2"
-			Margin="20,10,20,6"
-			FontSize="11"
-			Text="* CAMPO OBRIGATÓRIO"
-			TextColor="#E57373" />
+			Style="{StaticResource SaphRequiredHint}"
+			Text="* CAMPO OBRIGATÓRIO" />
 
-		<ScrollView
-			Grid.Row="3"
-			Margin="0,0,0,0"
-			VerticalOptions="Fill">
+		<ScrollView Grid.Row="3" VerticalOptions="Fill">
 			<VerticalStackLayout Padding="16,0,16,8" Spacing="16">
-				<Border
-					Padding="16,14"
-					BackgroundColor="#1E2422"
-					Stroke="#3D4A47"
-					StrokeThickness="1">
-					<Border.StrokeShape>
-						<RoundRectangle CornerRadius="14" />
-					</Border.StrokeShape>
+				<Border Padding="16,14" Style="{StaticResource SaphModalSectionCard}">
 					<VerticalStackLayout Spacing="14">
 						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
 							<CheckBox
-								Color="#24B2A1"
+								Color="{StaticResource SaphBoletimTeal}"
 								IsChecked="{Binding Form.DownloadArquivo, Mode=TwoWay}"
 								VerticalOptions="Center" />
 							<Label
 								FontSize="14"
+								LineBreakMode="WordWrap"
 								Text="Download do Arquivo"
-								TextColor="White"
+								TextColor="{DynamicResource SaphModalFieldText}"
 								VerticalOptions="Center" />
 						</HorizontalStackLayout>
 						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
 							<CheckBox
-								Color="#24B2A1"
+								Color="{StaticResource SaphBoletimTeal}"
 								IsChecked="{Binding Form.CopiaFisica, Mode=TwoWay}"
 								VerticalOptions="Center" />
 							<Label
 								FontSize="14"
+								LineBreakMode="WordWrap"
 								Text="Cópia Física"
-								TextColor="White"
+								TextColor="{DynamicResource SaphModalFieldText}"
 								VerticalOptions="Center" />
 						</HorizontalStackLayout>
 						<HorizontalStackLayout Spacing="12" VerticalOptions="Center">
 							<CheckBox
-								Color="#24B2A1"
+								Color="{StaticResource SaphBoletimTeal}"
 								IsChecked="{Binding Form.EnviarEmail, Mode=TwoWay}"
 								VerticalOptions="Center" />
 							<Label
 								FontSize="14"
+								LineBreakMode="WordWrap"
 								Text="Enviar por e-mail"
-								TextColor="White"
+								TextColor="{DynamicResource SaphModalFieldText}"
 								VerticalOptions="Center" />
 						</HorizontalStackLayout>
 
 						<VerticalStackLayout Spacing="6">
-							<Label FontSize="12" Text="Destinatário *" TextColor="#B0B0B0" />
+							<Label Style="{StaticResource SaphFieldCaption}" Text="Destinatário *" />
 							<Entry
-								BackgroundColor="#000000"
 								Placeholder="Rua Exemplo, 123 - Bairro - Cidade"
-								PlaceholderColor="#6B7280"
-								Text="{Binding Form.Destinatario}"
-								TextColor="White" />
+								Style="{StaticResource SaphFieldEntry}"
+								Text="{Binding Form.Destinatario}" />
 						</VerticalStackLayout>
 
 						<VerticalStackLayout Spacing="6">
-							<Label FontSize="12" Text="E-mail (Pode ser mais de um) *" TextColor="#B0B0B0" />
+							<Label Style="{StaticResource SaphFieldCaption}" Text="E-mail (Pode ser mais de um) *" />
 							<Entry
-								BackgroundColor="#000000"
 								Keyboard="Email"
 								Placeholder="E-mail para envio"
-								PlaceholderColor="#6B7280"
-								Text="{Binding Form.Email}"
-								TextColor="White" />
+								Style="{StaticResource SaphFieldEntry}"
+								Text="{Binding Form.Email}" />
 						</VerticalStackLayout>
 					</VerticalStackLayout>
 				</Border>
 
-				<Grid ColumnDefinitions="Auto,*" BackgroundColor="#252B29" HeightRequest="44">
+				<Grid ColumnDefinitions="Auto,*" Style="{StaticResource SaphSectionHeaderBar}">
 					<BoxView
 						Grid.Column="0"
 						WidthRequest="4"
-						Color="#24B2A1"
+						Color="{StaticResource SaphBoletimTeal}"
 						VerticalOptions="Fill" />
 					<Label
 						Grid.Column="1"
-						Margin="12,0,0,0"
-						FontAttributes="Bold"
-						FontSize="14"
-						Text="Autorização"
-						TextColor="White"
-						VerticalOptions="Center" />
+						Margin="12,0,12,0"
+						Style="{StaticResource SaphSectionHeaderTitle}"
+						Text="Autorização" />
 				</Grid>
 
 				<Grid ColumnDefinitions="4*,6*" ColumnSpacing="12">
 					<VerticalStackLayout Grid.Column="0" Spacing="6">
-						<Label FontSize="12" Text="Pessoa *" TextColor="#B0B0B0" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="Pessoa *" />
 						<Border
 							Padding="4,0"
-							BackgroundColor="#000000"
-							Stroke="#6B7280"
+							BackgroundColor="{DynamicResource SaphModalField}"
+							Stroke="{DynamicResource SaphModalStroke}"
 							StrokeThickness="1">
 							<Border.StrokeShape>
 								<RoundRectangle CornerRadius="8" />
 							</Border.StrokeShape>
 							<Picker
 								Title="Selecione"
-								TitleColor="#9CA3AF"
 								BackgroundColor="Transparent"
 								ItemsSource="{Binding PessoaItems}"
 								SelectedItem="{Binding Form.Pessoa, Mode=TwoWay}"
-								TextColor="White" />
+								Style="{StaticResource SaphFieldPicker}" />
 						</Border>
 					</VerticalStackLayout>
 					<VerticalStackLayout Grid.Column="1" Spacing="6">
-						<Label FontSize="12" Text="Nome *" TextColor="#B0B0B0" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="Nome *" />
 						<Entry
-							BackgroundColor="#1E2422"
 							Placeholder="Nome completo"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.Nome}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Nome}" />
 					</VerticalStackLayout>
 				</Grid>
 
 				<VerticalStackLayout Spacing="6">
-					<Label FontSize="12" Text="Tipo / Nº Documento *" TextColor="#B0B0B0" />
+					<Label Style="{StaticResource SaphFieldCaption}" Text="Tipo / Nº Documento *" />
 					<Entry
-						BackgroundColor="#1E2422"
 						Placeholder="RG, CPF, CNH…"
-						PlaceholderColor="#6B7280"
-						Text="{Binding Form.TipoNumeroDocumento}"
-						TextColor="White" />
+						Style="{StaticResource SaphFieldEntry}"
+						Text="{Binding Form.TipoNumeroDocumento}" />
 				</VerticalStackLayout>
 			</VerticalStackLayout>
 		</ScrollView>
 
+		<!-- Folha de assinatura: mantém-se clara em qualquer tema (é papel). -->
 		<Border
 			Grid.Row="4"
 			Margin="16,0,16,8"
 			Padding="0"
-			BackgroundColor="#D8D8D8"
-			Stroke="#9CA3AF"
+			BackgroundColor="{StaticResource SaphSignatureSheet}"
+			Stroke="{StaticResource SaphSignatureRule}"
 			StrokeThickness="1">
 			<Border.StrokeShape>
 				<RoundRectangle CornerRadius="10" />
@@ -208,55 +168,46 @@
 					BorderWidth="0"
 					Command="{Binding LimparAssinaturaCommand}"
 					HorizontalOptions="End"
+					SemanticProperties.Description="Limpar assinatura"
 					Text="LIMPAR"
-					TextColor="#1F2937"
+					TextColor="{StaticResource SaphSignatureInk}"
 					VerticalOptions="Start" />
 				<GraphicsView
 					x:Name="SignatureView"
 					Grid.Row="1"
-					BackgroundColor="White"
+					BackgroundColor="{StaticResource SaphSignatureCanvas}"
 					HorizontalOptions="Fill"
 					VerticalOptions="Fill" />
 				<VerticalStackLayout
 					Grid.Row="2"
 					Padding="0,0,0,8"
 					Spacing="4">
-					<BoxView HeightRequest="1" Color="#6B7280" />
+					<BoxView HeightRequest="1" Color="{StaticResource SaphSignatureRule}" />
 					<Label
 						FontSize="12"
 						HorizontalTextAlignment="Center"
 						Text="Assine aqui"
-						TextColor="#374151" />
+						TextColor="{StaticResource SaphSignatureHint}" />
 				</VerticalStackLayout>
 			</Grid>
 		</Border>
 
 		<Grid
 			Grid.Row="5"
-			Padding="16,12,16,20"
 			ColumnDefinitions="*,*"
-			ColumnSpacing="12"
-			BackgroundColor="#0A0D0C">
+			Style="{StaticResource SaphModalFooterBar}">
 			<Button
 				Grid.Column="0"
-				Padding="12,14"
-				BackgroundColor="Transparent"
-				BorderColor="White"
-				BorderWidth="1"
 				Command="{Binding VoltarCommand}"
-				CornerRadius="10"
-				FontAttributes="Bold"
-				Text="VOLTAR"
-				TextColor="White" />
+				SemanticProperties.Description="Voltar sem guardar"
+				Style="{StaticResource SaphSecondaryActionButton}"
+				Text="VOLTAR" />
 			<Button
 				Grid.Column="1"
-				Padding="12,14"
-				BackgroundColor="#24B2A1"
 				Command="{Binding EnviarCommand}"
-				CornerRadius="10"
-				FontAttributes="Bold"
-				Text="ENVIAR"
-				TextColor="White" />
+				SemanticProperties.Description="Enviar impressão do boletim"
+				Style="{StaticResource SaphActionButton}"
+				Text="ENVIAR" />
 		</Grid>
 	</Grid>
 </ContentPage>

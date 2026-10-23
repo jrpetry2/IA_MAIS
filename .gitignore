@@ -1,6 +1,48 @@
 ﻿################################################################################
-# Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
+# .gitignore — .NET / Visual Studio / MAUI (SaphMovel)
 ################################################################################
 
-/.vs
-/obj
+## Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.rsuser
+*.sln.docstates
+
+## Build results (qualquer pasta do repo)
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
+
+## NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+project.lock.json
+project.fragment.lock.json
+
+## Test / coverage
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.coverage
+*.coveragexml
+
+## OS / misc
+Thumbs.db
+Desktop.ini
+*.tmp
+*.temp
+*.log
+
+## Rider / VS Code (opcional)
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json

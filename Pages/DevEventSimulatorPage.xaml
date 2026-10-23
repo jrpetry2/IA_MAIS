@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SaphMovel.ViewModels"
+             x:Class="SaphMovel.Pages.DevEventSimulatorPage"
+             x:DataType="vm:DevEventSimulatorViewModel"
+             Title="Simular eventos"
+             BackgroundColor="{DynamicResource SaphModalSurface}">
+	<ScrollView>
+		<VerticalStackLayout Padding="20" Spacing="12"
+		                     x:Name="RootStack">
+			<Label Text="Simulador local (sem SAPH Cliente)"
+			       FontAttributes="Bold"
+			       FontSize="18"
+			       TextColor="{DynamicResource SaphModalFieldText}" />
+			<Label Text="{Binding EstadoAtual}"
+			       FontSize="14"
+			       LineBreakMode="WordWrap"
+			       TextColor="{DynamicResource SaphModalLabel}" />
+
+			<Button Text="Reset / Disponível"
+			        Command="{Binding ResetCommand}"
+			        BackgroundColor="{StaticResource SaphStatusUnknown}"
+			        MinimumHeightRequest="48"
+			        TextColor="{DynamicResource SaphOnActionButton}" />
+
+			<VerticalStackLayout BindableLayout.ItemsSource="{Binding Botoes}"
+			                     Spacing="8">
+				<BindableLayout.ItemTemplate>
+					<DataTemplate x:DataType="vm:SimEventButton">
+						<Button Text="{Binding Titulo}"
+						        IsEnabled="{Binding IsEnabled}"
+						        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.PublishCommand}"
+						        CommandParameter="{Binding EventoName}"
+						        BackgroundColor="{StaticResource SaphBoletimTeal}"
+						        MinimumHeightRequest="48"
+						        TextColor="{DynamicResource SaphOnActionButton}" />
+					</DataTemplate>
+				</BindableLayout.ItemTemplate>
+			</VerticalStackLayout>
+
+			<Button Text="Desvio de missão (novo chamado)"
+			        Command="{Binding DesvioCommand}"
+			        BackgroundColor="{StaticResource SaphStatusUnknown}"
+			        MinimumHeightRequest="48"
+			        TextColor="{DynamicResource SaphOnActionButton}" />
+
+			<BoxView HeightRequest="1" Color="{DynamicResource SaphModalStroke}" Margin="0,8" />
+
+			<Label Text="Prescrições (simular Cliente)"
+			       FontAttributes="Bold"
+			       FontSize="16"
+			       TextColor="{DynamicResource SaphModalFieldText}" />
+			<Label Text="{Binding PrescricaoStatus}"
+			       FontSize="13"
+			       LineBreakMode="WordWrap"
+			       TextColor="{DynamicResource SaphModalLabel}" />
+
+			<Button Text="Receber: Transporte"
+			        Command="{Binding ReceiveTransporteCommand}"
+			        BackgroundColor="{StaticResource SaphBoletimRegulationDot}"
+			        MinimumHeightRequest="48"
+			        TextColor="{DynamicResource SaphOnActionButton}" />
+			<Button Text="Receber: Protocolo PCR"
+			        Command="{Binding ReceiveProtocoloPcrCommand}"
+			        BackgroundColor="{StaticResource SaphBoletimRegulationDot}"
+			        MinimumHeightRequest="48"
+			        TextColor="{DynamicResource SaphOnActionButton}" />
+			<Button Text="Receber: Protocolo Afogamento"
+			        Command="{Binding ReceiveProtocoloAfogamentoCommand}"
+			        BackgroundColor="{StaticResource SaphBoletimRegulationDot}"
+			        MinimumHeightRequest="48"
+			        TextColor="{DynamicResource SaphOnActionButton}" />
+			<Button Text="Receber: Protocolo Atropelamento"
+			        Command="{Binding ReceiveProtocoloAtropelamentoCommand}"
+			        BackgroundColor="{StaticResource SaphBoletimRegulationDot}"
+			        MinimumHeightRequest="48"
+			        TextColor="{DynamicResource SaphOnActionButton}" />
+			<Button Text="Receber: Medicamentos (sem prescritão)"
+			        Command="{Binding ReceiveMedicamentosCommand}"
+			        BackgroundColor="{StaticResource SaphBoletimRegulationDot}"
+			        MinimumHeightRequest="48"
+			        TextColor="{DynamicResource SaphOnActionButton}" />
+			<Button Text="Limpar prescritões"
+			        Command="{Binding ClearPrescricoesCommand}"
+			        BackgroundColor="{StaticResource SaphStatusUnknown}"
+			        MinimumHeightRequest="48"
+			        TextColor="{DynamicResource SaphOnActionButton}" />
+
+			<Button Text="Fechar"
+			        Command="{Binding CloseCommand}"
+			        Margin="0,16,0,0"
+			        BackgroundColor="{DynamicResource SaphAccent}"
+			        MinimumHeightRequest="48"
+			        TextColor="{DynamicResource SaphOnAccent}" />
+		</VerticalStackLayout>
+	</ScrollView>
+</ContentPage>

@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using SaphMovel.Services.Json;
 
 namespace SaphMovel.Services.SinaisVitais;
 
@@ -20,7 +21,7 @@ internal static class SinaisVitaisKeyAliases
 	public const string Pts = "PTS";
 	public const string Evolucao = "Evolucao";
 
-    static readonly Regex NonAlnumSpaceRegex = new(
+	static readonly Regex NonAlnumSpaceRegex = new(
 		@"[^a-z0-9\s]+",
 		RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
@@ -88,8 +89,7 @@ internal static class SinaisVitaisKeyAliases
 
 		var s = sb.ToString().Normalize(NormalizationForm.FormC);
 		s = NonAlnumSpaceRegex.Replace(s, " ");
-		s = Regex.Replace(s, @"\s+", " ").Trim();
-		return s;
+		return LenientJson.CollapseWhitespace(s).Trim();
 	}
 
 	static Dictionary<string, string> BuildAliasMap()

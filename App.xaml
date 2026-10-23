@@ -2,6 +2,7 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SaphMovel"
+             xmlns:conv="clr-namespace:SaphMovel.Converters"
              x:Class="SaphMovel.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -10,6 +11,14 @@
                 <ResourceDictionary Source="Resources/Styles/SaphMovel.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Conversores usados por várias páginas (antes repetidos em cada ContentPage.Resources) -->
+            <conv:StringEqualsConverter x:Key="StringEq" />
+            <conv:InvertedBoolConverter x:Key="InvBool" />
+            <conv:BoolToOpacityConverter x:Key="BoolOpacity" />
+            <conv:TabKeyToFontAttributesConverter x:Key="TabKeyFont" />
+            <conv:StatusSceneToDotBrushConverter x:Key="SceneDotBrush" />
+            <conv:StringToImageSourceConverter x:Key="FileImage" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

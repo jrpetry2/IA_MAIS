@@ -3,95 +3,75 @@
 	x:Class="SaphMovel.Pages.TermoResponsabilidadePage"
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	Title="Termo de Responsabilidade"
-	BackgroundColor="#000000"
-	Shell.NavBarIsVisible="False">
+	xmlns:vm="clr-namespace:SaphMovel.ViewModels"
+	x:DataType="vm:TermoResponsabilidadeViewModel"
+	Style="{StaticResource SaphModalPage}"
+	Title="Termo de Responsabilidade">
 
 	<Grid RowDefinitions="Auto,Auto,*,Auto">
 		<Grid
 			Grid.Row="0"
-			Padding="4,8,12,8"
 			ColumnDefinitions="Auto,*"
-			BackgroundColor="#000000">
+			Style="{StaticResource SaphModalHeaderBar}">
 			<Button
 				Grid.Column="0"
-				Padding="12,8"
-				BackgroundColor="Transparent"
 				Command="{Binding VoltarCommand}"
-				FontSize="22"
-				Text="←"
-				TextColor="White" />
+				Style="{StaticResource SaphModalBackButton}"
+				Text="←" />
 			<Label
 				Grid.Column="1"
-				FontAttributes="Bold"
-				FontSize="17"
-				LineBreakMode="WordWrap"
-				Text="Termo de Responsabilidade"
-				TextColor="White"
-				VerticalOptions="Center" />
+				Style="{StaticResource SaphModalTitle}"
+				Text="Termo de Responsabilidade" />
 		</Grid>
 
 		<Border
 			Grid.Row="1"
 			Margin="16,8,16,12"
-			Padding="14,12"
-			BackgroundColor="#000000"
-			StrokeThickness="0">
-			<Border.StrokeShape>
-				<RoundRectangle CornerRadius="14" />
-			</Border.StrokeShape>
+			Style="{StaticResource SaphPatientCard}">
 			<HorizontalStackLayout Spacing="10">
 				<Label FontSize="22" Text="{Binding PatientEmoji}" VerticalOptions="Center" />
-				<Label
-					FontAttributes="Bold"
-					FontSize="15"
-					Text="{Binding PatientSummary}"
-					TextColor="White"
-					VerticalOptions="Center" />
+				<Label Style="{StaticResource SaphPatientSummary}" Text="{Binding PatientSummary}" />
 			</HorizontalStackLayout>
 		</Border>
 
 		<ScrollView Grid.Row="2">
 			<VerticalStackLayout Padding="16,0,16,20" Spacing="16">
-				<Border
-					Padding="16,14"
-					BackgroundColor="#1E2422"
-					Stroke="#3D4A47"
-					StrokeThickness="1">
-					<Border.StrokeShape>
-						<RoundRectangle CornerRadius="14" />
-					</Border.StrokeShape>
+				<Border Padding="16,14" Style="{StaticResource SaphModalSectionCard}">
 					<VerticalStackLayout Spacing="14">
-						<Label FontSize="14" Text="Selecione o Termo" TextColor="White" />
+						<Label
+							FontSize="14"
+							Style="{StaticResource SaphFieldCaption}"
+							Text="Selecione o Termo" />
 						<Border
 							Padding="10,4"
-							BackgroundColor="#000000"
-							Stroke="White"
+							BackgroundColor="{DynamicResource SaphModalField}"
+							Stroke="{DynamicResource SaphModalStroke}"
 							StrokeThickness="1">
 							<Border.StrokeShape>
 								<RoundRectangle CornerRadius="8" />
 							</Border.StrokeShape>
 							<Picker
 								Title="Termo"
-								TitleColor="#9CA3AF"
 								BackgroundColor="Transparent"
 								ItemsSource="{Binding OpcoesTermo}"
 								SelectedItem="{Binding Form.TermoSelecionado, Mode=TwoWay}"
-								TextColor="White" />
+								Style="{StaticResource SaphFieldPicker}" />
 						</Border>
 						<Label
 							FontSize="14"
 							LineBreakMode="WordWrap"
 							Text="{Binding Form.TextoLegalCalculado}"
-							TextColor="#E8E8E8" />
+							TextColor="{DynamicResource SaphModalFieldText}" />
 						<Button
 							Padding="16,14"
-							BackgroundColor="#32CD32"
+							BackgroundColor="{StaticResource SaphStatusGreenAlt}"
 							Command="{Binding AdicionarAssinaturasCommand}"
 							CornerRadius="10"
 							FontAttributes="Bold"
+							MinimumHeightRequest="48"
+							SemanticProperties.Description="Adicionar assinaturas ao termo"
 							Text="ADICIONAR ASSINATURAS"
-							TextColor="White" />
+							TextColor="{DynamicResource SaphOnActionButton}" />
 					</VerticalStackLayout>
 				</Border>
 			</VerticalStackLayout>
@@ -99,30 +79,20 @@
 
 		<Grid
 			Grid.Row="3"
-			Padding="16,12,16,20"
 			ColumnDefinitions="*,*"
-			ColumnSpacing="12"
-			BackgroundColor="#0A0D0C">
+			Style="{StaticResource SaphModalFooterBar}">
 			<Button
 				Grid.Column="0"
-				Padding="12,14"
-				BackgroundColor="Transparent"
-				BorderColor="White"
-				BorderWidth="1"
 				Command="{Binding VoltarCommand}"
-				CornerRadius="10"
-				FontAttributes="Bold"
-				Text="VOLTAR"
-				TextColor="White" />
+				SemanticProperties.Description="Voltar sem guardar"
+				Style="{StaticResource SaphSecondaryActionButton}"
+				Text="VOLTAR" />
 			<Button
 				Grid.Column="1"
-				Padding="12,14"
-				BackgroundColor="#20B2AA"
 				Command="{Binding EnviarCommand}"
-				CornerRadius="10"
-				FontAttributes="Bold"
-				Text="ENVIAR"
-				TextColor="White" />
+				SemanticProperties.Description="Enviar termo de responsabilidade"
+				Style="{StaticResource SaphActionButton}"
+				Text="ENVIAR" />
 		</Grid>
 	</Grid>
 </ContentPage>

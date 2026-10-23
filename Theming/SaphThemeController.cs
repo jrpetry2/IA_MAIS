@@ -61,21 +61,6 @@ public static class SaphThemeController
 		SyncAndroidChrome(dark);
 	}
 
-	/// <summary>
-	/// Reatribui as cores do tema a <c>Application.Current.Resources</c>, <b>sem</b> alterar
-	/// <see cref="Application.UserAppTheme"/> nem o chrome do SO. O MAUI pode, ao trocar de aba,
-	/// re-resolver <c>DynamicResource</c> com valores estáticos do dicionário mesclado; reforçar
-	/// a paleta evita o flash a branco e a sensação de alternar claro/escuro.
-	/// </summary>
-	public static void ReapplyThemedColorResourcesOnly()
-	{
-		if (Application.Current is not { } app)
-			return;
-		var dark = IsDark;
-		CopyThemedColorResourcesToApp(app, dark);
-		ThemeChanged?.Invoke(null, EventArgs.Empty);
-	}
-
 	static void SyncAndroidChrome(bool dark)
 	{
 		MainThread.BeginInvokeOnMainThread(() =>

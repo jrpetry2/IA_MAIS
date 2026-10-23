@@ -5,6 +5,7 @@ using Microsoft.Maui.Devices.Sensors;
 using Microsoft.Maui.Maps;
 using SaphMovel;
 using SaphMovel.Models;
+using SaphMovel.Services.Demo;
 using SaphMovel.Services.Voice;
 using SaphMovel.ViewModels;
 
@@ -14,12 +15,14 @@ public partial class MainPage : ContentPage
 {
 	readonly ILogger<MainPage> _log;
 	readonly IVoskListeningService _vosk;
+	readonly DemoEventRemoteSyncService _demoSync;
 	bool _mapaLocalizacaoPronto;
 
-	public MainPage(ILogger<MainPage> log, IVoskListeningService vosk)
+	public MainPage(ILogger<MainPage> log, IVoskListeningService vosk, DemoEventRemoteSyncService demoSync)
 	{
 		_log = log;
 		_vosk = vosk;
+		_demoSync = demoSync;
 		InitializeComponent();
 		UiDialogHost.Register(this);
 		BindingContext = AppServices.CreateMainViewModel();
@@ -42,7 +45,11 @@ public partial class MainPage : ContentPage
 		try
 		{
 			if (BindingContext is MainViewModel vm)
+			{
+				_demoSync.SetHost(vm);
+				_demoSync.Start();
 				await _vosk.StartAsync(vm).ConfigureAwait(true);
+			}
 		}
 		catch (Exception ex)
 		{
@@ -52,6 +59,8 @@ public partial class MainPage : ContentPage
 
 	protected override async void OnDisappearing()
 	{
+		_demoSync.Stop();
+		_demoSync.SetHost(null);
 		try
 		{
 			await _vosk.StopAsync().ConfigureAwait(true);
@@ -107,6 +116,8 @@ public partial class MainPage : ContentPage
 		}
 	}
 
+	bool _abrindoEtapaBoletim;
+
 	async void OnBoletimRowSelected(object? sender, SelectionChangedEventArgs e)
 	{
 		if (sender is not CollectionView cv)
@@ -114,6 +125,26 @@ public partial class MainPage : ContentPage
 		if (e.CurrentSelection.FirstOrDefault() is not BoletimRowItem row)
 			return;
 		cv.SelectedItem = null;
+		// Toque duplo abria dois modais (e parava/arrancava a escuta duas vezes).
+		if (_abrindoEtapaBoletim)
+			return;
+		_abrindoEtapaBoletim = true;
+		try
+		{
+			await AbrirEtapaBoletimAsync(row);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Boletim: falha ao abrir etapa {Step}.", row.StepKey);
+		}
+		finally
+		{
+			_abrindoEtapaBoletim = false;
+		}
+	}
+
+	async Task AbrirEtapaBoletimAsync(BoletimRowItem row)
+	{
 		if (BindingContext is not MainViewModel vm)
 		{
 			await DisplayAlertAsync(row.Title, "Integrar fluxo desta etapa.", "OK");

@@ -1,10 +1,7 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 namespace SaphMovel.Models;
 
 /// <summary>Estado em memória do formulário Impressão do Boletim (Boletim APH).</summary>
-public sealed class ImpressaoBoletimFormData : INotifyPropertyChanged
+public sealed class ImpressaoBoletimFormData : ObservableModel
 {
 	bool _downloadArquivo = true;
 	bool _copiaFisica = true;
@@ -71,17 +68,18 @@ public sealed class ImpressaoBoletimFormData : INotifyPropertyChanged
 		set => SetField(ref _assinaturaStrokesJson, value);
 	}
 
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	void OnPropertyChanged([CallerMemberName] string? name = null) =>
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-	bool SetField<T>(ref T field, T value, [CallerMemberName] string? name = null)
+	/// <summary>Volta aos valores iniciais e apaga a assinatura (novo atendimento / desvio de missão).</summary>
+	public void Reset()
 	{
-		if (EqualityComparer<T>.Default.Equals(field, value))
-			return false;
-		field = value;
-		OnPropertyChanged(name);
-		return true;
+		DownloadArquivo = true;
+		CopiaFisica = true;
+		EnviarEmail = true;
+		Destinatario = string.Empty;
+		Email = string.Empty;
+		Pessoa = string.Empty;
+		Nome = string.Empty;
+		TipoNumeroDocumento = string.Empty;
+		AssinaturaStrokesJson = null;
 	}
+
 }

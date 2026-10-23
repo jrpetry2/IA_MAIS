@@ -6,7 +6,7 @@ using SaphMovel.Services.Voice;
 namespace SaphMovel.Platforms.Android.Audio;
 
 /// <summary>
-/// Gravação «pressionar para falar»: <see cref="MediaRecorder"/> AAC/MP4 em <see cref="SinaisVitaisAudioPaths.AppRootRecordingFile"/>.
+/// Gravação «pressionar para falar»: MediaRecorder AAC/MP4 em <see cref="SinaisVitaisAudioPaths.AppRootRecordingFile"/>.
 /// </summary>
 public sealed class SinaisVitaisPressRecordService : IPressHoldAudioRecordService
 {
@@ -18,6 +18,12 @@ public sealed class SinaisVitaisPressRecordService : IPressHoldAudioRecordServic
 	bool _recording;
 	bool _voskWasStoppedForRecording;
 
+	/// <summary>Arranque em curso (permissão, parar Vosk, 300 ms) — o botão pode ser solto antes de acabar.</summary>
+	TaskCompletionSource<bool>? _starting;
+
+	/// <summary>O utilizador soltou o botão durante o arranque: não começar (ou parar logo) a gravação.</summary>
+	bool _stopRequested;
+
 	public SinaisVitaisPressRecordService(
 		ILogger<SinaisVitaisPressRecordService> log,
 		IVoskListeningService? vosk = null)
@@ -26,12 +32,13 @@ public sealed class SinaisVitaisPressRecordService : IPressHoldAudioRecordServic
 		_vosk = vosk;
 	}
 
+	/// <summary>Inclui o arranque em curso, para que soltar o botão cedo ainda chame <see cref="StopAsync"/>.</summary>
 	public bool IsRecording
 	{
 		get
 		{
 			lock (_gate)
-				return _recording;
+				return _recording || _starting is not null;
 		}
 	}
 
@@ -39,11 +46,41 @@ public sealed class SinaisVitaisPressRecordService : IPressHoldAudioRecordServic
 
 	public async Task<bool> StartAsync()
 	{
+		var mine = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		TaskCompletionSource<bool>? existing;
 		lock (_gate)
 		{
 			if (_recording)
 				return true;
+			existing = _starting;
+			if (existing is null)
+			{
+				_starting = mine;
+				_stopRequested = false;
+			}
 		}
+
+		if (existing is not null)
+			return await existing.Task.ConfigureAwait(false);
+
+		var ok = false;
+		try
+		{
+			ok = await StartCoreAsync().ConfigureAwait(false);
+		}
+		finally
+		{
+			lock (_gate)
+				_starting = null;
+			mine.TrySetResult(ok);
+		}
+		return ok;
+	}
+
+	async Task<bool> StartCoreAsync()
+	{
+		// Sem isto, soltar o botão cedo transcrevia a gravação anterior (outro paciente / outro ecrã).
+		TryDeleteOutputFile();
 
 		var status = MainThread.IsMainThread
 			? await Permissions.RequestAsync<Permissions.Microphone>().ConfigureAwait(false)
@@ -55,23 +92,50 @@ public sealed class SinaisVitaisPressRecordService : IPressHoldAudioRecordServic
 			return false;
 		}
 
-		if (_vosk is not null)
+		// Só pára (e depois retoma) o Vosk se ele estava mesmo a ouvir.
+		if (_vosk is not null && _vosk.IsListening)
 		{
-			_voskWasStoppedForRecording = true;
 			try
 			{
 				await _vosk.StopAsync().ConfigureAwait(false);
+				lock (_gate)
+					_voskWasStoppedForRecording = true;
 			}
 			catch (Exception ex)
 			{
-				_voskWasStoppedForRecording = false;
 				_log.LogDebug(ex, "Gravação: falha ao parar Vosk antes de gravar.");
 			}
 
 			await Task.Delay(300).ConfigureAwait(false);
 		}
 
-		return await MainThread.InvokeOnMainThreadAsync(StartCaptureOnUiThread).ConfigureAwait(false);
+		bool stopRequested;
+		lock (_gate)
+			stopRequested = _stopRequested;
+		if (stopRequested)
+		{
+			_log.LogInformation("Gravação: botão solto antes de a gravação começar — cancelada.");
+			await ResumeVoskIfStoppedAsync().ConfigureAwait(false);
+			return false;
+		}
+
+		var ok = await MainThread.InvokeOnMainThreadAsync(StartCaptureOnUiThread).ConfigureAwait(false);
+		if (!ok)
+			await ResumeVoskIfStoppedAsync().ConfigureAwait(false);
+		return ok;
+	}
+
+	void TryDeleteOutputFile()
+	{
+		try
+		{
+			if (File.Exists(OutputFilePath))
+				File.Delete(OutputFilePath);
+		}
+		catch (Exception ex)
+		{
+			_log.LogDebug(ex, "Gravação: não foi possível apagar a gravação anterior.");
+		}
 	}
 
 	bool StartCaptureOnUiThread()
@@ -107,13 +171,42 @@ public sealed class SinaisVitaisPressRecordService : IPressHoldAudioRecordServic
 
 	public async Task StopAsync()
 	{
-		await MainThread.InvokeOnMainThreadAsync(StopCaptureOnUiThread).ConfigureAwait(false);
+		TaskCompletionSource<bool>? starting;
+		lock (_gate)
+		{
+			starting = _starting;
+			if (starting is not null)
+				_stopRequested = true;
+		}
 
-		if (!_voskWasStoppedForRecording || _vosk is null)
+		// Botão solto durante o arranque: espera que termine para não deixar o MediaRecorder a gravar sozinho.
+		if (starting is not null)
+			await starting.Task.ConfigureAwait(false);
+
+		await MainThread.InvokeOnMainThreadAsync(StopCaptureOnUiThread).ConfigureAwait(false);
+		await ResumeVoskIfStoppedAsync().ConfigureAwait(false);
+	}
+
+	/// <summary>Vosk só reactiva quando o utilizador já não está a gravar (evita disputa no microfone).</summary>
+	async Task ResumeVoskIfStoppedAsync()
+	{
+		bool resume;
+		lock (_gate)
+		{
+			resume = _voskWasStoppedForRecording;
+			_voskWasStoppedForRecording = false;
+		}
+		if (!resume || _vosk is null)
 			return;
 
-		// Vosk só reactiva quando o utilizador já não está a gravar (evita disputa no microfone).
-		_voskWasStoppedForRecording = false;
+		try
+		{
+			await _vosk.ResumeAsync().ConfigureAwait(false);
+		}
+		catch (Exception ex)
+		{
+			_log.LogDebug(ex, "Gravação: falha ao retomar Vosk depois de gravar.");
+		}
 	}
 
 	void StopCaptureOnUiThread()

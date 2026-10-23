@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SaphMovel.ViewModels"
+             x:Class="SaphMovel.Pages.TtsVoicePickerPage"
+             x:DataType="vm:TtsVoicePickerViewModel"
+             Title="Voz do assistente"
+             BackgroundColor="{DynamicResource SaphModalSurface}">
+	<Grid RowDefinitions="Auto,*,Auto" Padding="16" RowSpacing="12">
+		<VerticalStackLayout Grid.Row="0" Spacing="8">
+			<Label Text="Voz do assistente (TTS)"
+			       FontAttributes="Bold"
+			       FontSize="18"
+			       TextColor="{DynamicResource SaphModalFieldText}" />
+			<Label Text="{Binding StatusText}"
+			       FontSize="13"
+			       LineBreakMode="WordWrap"
+			       TextColor="{DynamicResource SaphModalLabel}" />
+			<HorizontalStackLayout Spacing="8">
+				<Button Text="Automática"
+				        Command="{Binding SelectAutomaticCommand}"
+				        BackgroundColor="{StaticResource SaphStatusUnknown}"
+				        MinimumHeightRequest="44"
+				        TextColor="{DynamicResource SaphOnActionButton}" />
+				<Button Text="Atualizar"
+				        Command="{Binding RefreshCommand}"
+				        BackgroundColor="{StaticResource SaphBoletimTeal}"
+				        MinimumHeightRequest="44"
+				        TextColor="{DynamicResource SaphOnActionButton}" />
+			</HorizontalStackLayout>
+		</VerticalStackLayout>
+
+		<CollectionView Grid.Row="1"
+		                ItemsSource="{Binding Voices}"
+		                SelectionMode="None">
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="vm:TtsVoiceRow">
+					<Border Margin="0,4"
+					        Padding="12"
+					        Stroke="{DynamicResource SaphModalStroke}"
+					        StrokeThickness="1"
+					        BackgroundColor="{DynamicResource SaphModalCard}">
+						<Border.StrokeShape>
+							<RoundRectangle CornerRadius="8" />
+						</Border.StrokeShape>
+						<Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+							<Label Grid.Column="0"
+							       Text="{Binding SelectionMark}"
+							       FontAttributes="Bold"
+							       FontSize="18"
+							       TextColor="{StaticResource SaphBoletimTeal}"
+							       VerticalOptions="Center"
+							       WidthRequest="22" />
+							<VerticalStackLayout Grid.Column="1" Spacing="2">
+								<Label Text="{Binding Title}"
+								       FontAttributes="Bold"
+								       FontSize="15"
+								       LineBreakMode="WordWrap"
+								       TextColor="{DynamicResource SaphModalFieldText}" />
+								<Label Text="{Binding Subtitle}"
+								       FontSize="12"
+								       LineBreakMode="WordWrap"
+								       TextColor="{DynamicResource SaphModalLabel}" />
+							</VerticalStackLayout>
+							<VerticalStackLayout Grid.Column="2" Spacing="4">
+								<Button Text="Usar"
+								        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectVoiceCommand}"
+								        CommandParameter="{Binding .}"
+								        BackgroundColor="{StaticResource SaphBoletimTeal}"
+								        TextColor="{DynamicResource SaphOnActionButton}"
+								        Padding="10,6"
+								        FontSize="12" />
+								<Button Text="Ouvir"
+								        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.PreviewCommand}"
+								        CommandParameter="{Binding .}"
+								        BackgroundColor="{DynamicResource SaphAccent}"
+								        TextColor="{DynamicResource SaphOnAccent}"
+								        Padding="10,6"
+								        FontSize="12" />
+							</VerticalStackLayout>
+						</Grid>
+					</Border>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<Button Grid.Row="2"
+		        Text="Fechar"
+		        Command="{Binding CloseCommand}"
+		        BackgroundColor="{DynamicResource SaphAccent}"
+		        MinimumHeightRequest="48"
+		        TextColor="{DynamicResource SaphOnAccent}" />
+	</Grid>
+</ContentPage>

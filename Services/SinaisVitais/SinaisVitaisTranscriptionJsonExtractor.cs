@@ -1,19 +1,12 @@
 using System.Linq;
 using System.Text.Json;
-using System.Text.RegularExpressions;
+using SaphMovel.Services.Json;
 
 namespace SaphMovel.Services.SinaisVitais;
 
 /// <summary>Extrai o JSON de sinais vitais da resposta OpenAI (response_format=json → campo text, etc.).</summary>
 public static class SinaisVitaisTranscriptionJsonExtractor
 {
-	const int MaxUnwrapDepth = 5;
-
-	static readonly Regex JsonFenceRegex = new(
-		@"```(?:json)?\s*([\s\S]*?)\s*```",
-		RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled,
-		TimeSpan.FromMilliseconds(200));
-
 	static readonly string[] VitalsHints =
 	[
 		"PAD", "PAS", "FC", "FR", "Sat", "Glasgow", "RTS", "PTS", "Temp", "HGT",
@@ -27,7 +20,7 @@ public static class SinaisVitaisTranscriptionJsonExtractor
 	static bool TryExtract(string? raw, int depth, out string vitalsJson)
 	{
 		vitalsJson = "";
-		if (depth > MaxUnwrapDepth || string.IsNullOrWhiteSpace(raw))
+		if (depth > LenientJson.MaxUnwrapDepth || string.IsNullOrWhiteSpace(raw))
 			return false;
 
 		var trimmed = raw.Trim();
@@ -35,16 +28,8 @@ public static class SinaisVitaisTranscriptionJsonExtractor
 		if (TryExtractFromJsonDocument(trimmed, depth, out vitalsJson))
 			return true;
 
-		if (trimmed.Contains("```", StringComparison.Ordinal))
-		{
-			var fence = JsonFenceRegex.Match(trimmed);
-			if (fence.Success)
-			{
-				var inner = fence.Groups[1].Value.Trim();
-				if (inner.Length > 0 && !string.Equals(inner, trimmed, StringComparison.Ordinal))
-					return TryExtract(inner, depth + 1, out vitalsJson);
-			}
-		}
+		if (LenientJson.TryUnwrapFence(trimmed, out var fenceInner))
+			return TryExtract(fenceInner, depth + 1, out vitalsJson);
 
 		return TryExtractVitalsBraceSlice(trimmed, out vitalsJson);
 	}
@@ -82,7 +67,7 @@ public static class SinaisVitaisTranscriptionJsonExtractor
 		return false;
 	}
 
-	/// <summary>Objeto <c>{PAD: 80, ...}</c> (chaves sem aspas) — sem reentrar em <see cref="TryExtract"/>.</summary>
+	/// <summary>Objeto <c>{PAD: 80, ...}</c> (chaves sem aspas) — sem reentrar em <see cref="TryExtract(string?, out string)"/>.</summary>
 	static bool TryExtractVitalsBraceSlice(string text, out string vitalsJson)
 	{
 		vitalsJson = "";

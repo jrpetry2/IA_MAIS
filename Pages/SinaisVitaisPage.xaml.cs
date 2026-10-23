@@ -16,10 +16,10 @@ public partial class SinaisVitaisPage : ContentPage
 			mainVm,
 			this,
 			AppServices.GetRequiredService<IPressHoldAudioRecordService>(),
-			AppServices.GetRequiredService<IOpenAiVitalsTranscriptionService>());
+			AppServices.GetRequiredService<IOpenAiTranscriptionService>());
 		BindingContext = _vm;
 
-		OuvirPressHoldAttach.Attach(OuvirPressArea, _vm.OnOuvirPressed, _vm.OnOuvirReleased);
+		OuvirPressHoldAttach.Attach(OuvirPanel.PressArea, _vm.OnOuvirPressed, _vm.OnOuvirReleased);
 	}
 
 	protected override void OnAppearing()

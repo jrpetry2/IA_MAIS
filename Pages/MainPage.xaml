@@ -4,6 +4,7 @@
 	x:Class="SaphMovel.Pages.MainPage"
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:controls="clr-namespace:SaphMovel.Controls"
 	xmlns:conv="clr-namespace:SaphMovel.Converters"
 	xmlns:models="clr-namespace:SaphMovel.Models"
 	xmlns:viewmodels="clr-namespace:SaphMovel.ViewModels"
@@ -14,13 +15,6 @@
 	BackgroundColor="{Binding MainChromeBackgroundColor}">
 
 	<ContentPage.Resources>
-		<conv:StringEqualsConverter x:Key="StringEq" />
-		<conv:InvertedBoolConverter x:Key="InvBool" />
-		<conv:TabKeyToFontAttributesConverter x:Key="TabKeyFont" />
-		<conv:StatusSceneToDotBrushConverter x:Key="SceneDotBrush" />
-		<conv:StringToImageSourceConverter x:Key="FileImage" />
-		<conv:StringIsNotEmptyConverter x:Key="StrNotEmpty" />
-		<conv:StringIsEmptyConverter x:Key="StrEmpty" />
 		<Style x:Key="BoletimHeaderIconBtn" TargetType="Button">
 			<Setter Property="BackgroundColor" Value="Transparent" />
 			<Setter Property="BorderWidth" Value="0" />
@@ -120,7 +114,7 @@
 				VerticalOptions="Start">
 				<Border
 					Padding="8,4"
-					BackgroundColor="#1A2DBE1B"
+					BackgroundColor="{DynamicResource SaphVoiceActiveTint}"
 					IsVisible="{Binding IsVoiceMicrophoneActive}"
 					SemanticProperties.Description="Microfone activo para comandos de voz offline"
 					Stroke="{StaticResource SaphBoletimTeal}"
@@ -179,13 +173,13 @@
 					HeightRequest="10"
 					VerticalOptions="Center"
 					WidthRequest="10"
-					Fill="#CC8800">
+					Fill="{StaticResource SaphVoiceWarnDot}">
 					<Ellipse.Triggers>
 						<DataTrigger Binding="{Binding IsVoiceMicrophoneActive}" TargetType="Ellipse" Value="True">
 							<Setter Property="Fill" Value="{StaticResource SaphBoletimTeal}" />
 						</DataTrigger>
 						<DataTrigger Binding="{Binding ShowVoiceModelReadyHint}" TargetType="Ellipse" Value="True">
-							<Setter Property="Fill" Value="#2196F3" />
+							<Setter Property="Fill" Value="{StaticResource SaphStatusBlue}" />
 						</DataTrigger>
 					</Ellipse.Triggers>
 				</Ellipse>
@@ -193,7 +187,7 @@
 					FontSize="14"
 					LineBreakMode="WordWrap"
 					MaxLines="3"
-					Text="A ouvir — diga «olá sistema» ou o nome do item do menu STATUS."
+					Text="{Binding VoiceListeningStatusText}"
 					TextColor="{Binding MainChromePrimaryTextColor}"
 					VerticalOptions="Center"
 					IsVisible="{Binding IsVoiceMicrophoneActive}" />
@@ -228,18 +222,14 @@
 				BackgroundColor="{Binding MainChromeBackgroundColor}">
 
 				<VerticalStackLayout
-					Padding="16,10,16,0"
-					Spacing="0"
-					MinimumHeightRequest="48"
+					Style="{StaticResource SaphMainTabItem}"
 					MinimumWidthRequest="108">
 					<VerticalStackLayout.GestureRecognizers>
 						<TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="STATUS" />
 					</VerticalStackLayout.GestureRecognizers>
 					<Label
+						Style="{StaticResource SaphMainTabLabel}"
 						FontAttributes="{Binding SelectedTabKey, Converter={StaticResource TabKeyFont}, ConverterParameter='STATUS'}"
-						FontSize="15"
-						HorizontalTextAlignment="Center"
-						LineBreakMode="NoWrap"
 						Text="STATUS"
 						TextColor="{Binding MainChromePrimaryTextColor}" />
 					<BoxView HeightRequest="3" Color="{StaticResource SaphBoletimTeal}" Opacity="0">
@@ -251,25 +241,17 @@
 					</BoxView>
 				</VerticalStackLayout>
 
-				<BoxView
-					WidthRequest="1"
-					Margin="0,8,0,12"
-					VerticalOptions="Fill"
-					Color="{Binding MainChromeTabDividerColor}" />
+				<BoxView Style="{StaticResource SaphMainTabDivider}" Color="{Binding MainChromeTabDividerColor}" />
 
 				<VerticalStackLayout
-					Padding="16,10,16,0"
-					Spacing="0"
-					MinimumHeightRequest="48"
+					Style="{StaticResource SaphMainTabItem}"
 					MinimumWidthRequest="120">
 					<VerticalStackLayout.GestureRecognizers>
 						<TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="CHAMADO" />
 					</VerticalStackLayout.GestureRecognizers>
 					<Label
+						Style="{StaticResource SaphMainTabLabel}"
 						FontAttributes="{Binding SelectedTabKey, Converter={StaticResource TabKeyFont}, ConverterParameter='CHAMADO'}"
-						FontSize="15"
-						HorizontalTextAlignment="Center"
-						LineBreakMode="NoWrap"
 						Text="CHAMADO"
 						TextColor="{Binding MainChromePrimaryTextColor}" />
 					<BoxView HeightRequest="3" Color="{StaticResource SaphBoletimTeal}" Opacity="0">
@@ -281,25 +263,17 @@
 					</BoxView>
 				</VerticalStackLayout>
 
-				<BoxView
-					WidthRequest="1"
-					Margin="0,8,0,12"
-					VerticalOptions="Fill"
-					Color="{Binding MainChromeTabDividerColor}" />
+				<BoxView Style="{StaticResource SaphMainTabDivider}" Color="{Binding MainChromeTabDividerColor}" />
 
 				<VerticalStackLayout
-					Padding="16,10,16,0"
-					Spacing="0"
-					MinimumHeightRequest="48"
+					Style="{StaticResource SaphMainTabItem}"
 					MinimumWidthRequest="140">
 					<VerticalStackLayout.GestureRecognizers>
 						<TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="BOLETIM" />
 					</VerticalStackLayout.GestureRecognizers>
 					<Label
+						Style="{StaticResource SaphMainTabLabel}"
 						FontAttributes="{Binding SelectedTabKey, Converter={StaticResource TabKeyFont}, ConverterParameter='BOLETIM'}"
-						FontSize="15"
-						HorizontalTextAlignment="Center"
-						LineBreakMode="NoWrap"
 						Text="BOLETIM APH"
 						TextColor="{Binding MainChromePrimaryTextColor}" />
 					<BoxView HeightRequest="3" Color="{StaticResource SaphBoletimTeal}" Opacity="0">
@@ -311,25 +285,17 @@
 					</BoxView>
 				</VerticalStackLayout>
 
-				<BoxView
-					WidthRequest="1"
-					Margin="0,8,0,12"
-					VerticalOptions="Fill"
-					Color="{Binding MainChromeTabDividerColor}" />
+				<BoxView Style="{StaticResource SaphMainTabDivider}" Color="{Binding MainChromeTabDividerColor}" />
 
 				<VerticalStackLayout
-					Padding="16,10,16,0"
-					Spacing="0"
-					MinimumHeightRequest="48"
+					Style="{StaticResource SaphMainTabItem}"
 					MinimumWidthRequest="128">
 					<VerticalStackLayout.GestureRecognizers>
 						<TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="PRESCRICAO" />
 					</VerticalStackLayout.GestureRecognizers>
 					<Label
+						Style="{StaticResource SaphMainTabLabel}"
 						FontAttributes="{Binding SelectedTabKey, Converter={StaticResource TabKeyFont}, ConverterParameter='PRESCRICAO'}"
-						FontSize="15"
-						HorizontalTextAlignment="Center"
-						LineBreakMode="NoWrap"
 						Text="PRESCRIÇÃO"
 						TextColor="{Binding MainChromePrimaryTextColor}" />
 					<BoxView HeightRequest="3" Color="{StaticResource SaphBoletimTeal}" Opacity="0">
@@ -341,25 +307,17 @@
 					</BoxView>
 				</VerticalStackLayout>
 
-				<BoxView
-					WidthRequest="1"
-					Margin="0,8,0,12"
-					VerticalOptions="Fill"
-					Color="{Binding MainChromeTabDividerColor}" />
+				<BoxView Style="{StaticResource SaphMainTabDivider}" Color="{Binding MainChromeTabDividerColor}" />
 
 				<VerticalStackLayout
-					Padding="16,10,16,0"
-					Spacing="0"
-					MinimumHeightRequest="48"
+					Style="{StaticResource SaphMainTabItem}"
 					MinimumWidthRequest="130">
 					<VerticalStackLayout.GestureRecognizers>
 						<TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="LOCALIZACAO" />
 					</VerticalStackLayout.GestureRecognizers>
 					<Label
+						Style="{StaticResource SaphMainTabLabel}"
 						FontAttributes="{Binding SelectedTabKey, Converter={StaticResource TabKeyFont}, ConverterParameter='LOCALIZACAO'}"
-						FontSize="15"
-						HorizontalTextAlignment="Center"
-						LineBreakMode="NoWrap"
 						Text="LOCALIZAÇÃO"
 						TextColor="{Binding MainChromePrimaryTextColor}" />
 					<BoxView HeightRequest="3" Color="{StaticResource SaphBoletimTeal}" Opacity="0">
@@ -473,7 +431,7 @@
 					<!-- Cena: Aguardando regulação (Figma — fundo preto, pílula, ilustração) -->
 					<Grid
 						IsVisible="{Binding IsAguardandoRegulacaoScene}"
-						BackgroundColor="{StaticResource SaphStatusRegulacaoCanvas}"
+						BackgroundColor="{DynamicResource SaphStatusRegulacaoCanvas}"
 						VerticalOptions="Fill"
 						HorizontalOptions="FillAndExpand">
 						<ScrollView VerticalOptions="Fill">
@@ -485,7 +443,7 @@
 								HorizontalOptions="Center">
 								<Border
 									Padding="22,16"
-									BackgroundColor="{StaticResource SaphStatusRegulacaoPill}"
+									BackgroundColor="{DynamicResource SaphStatusRegulacaoPill}"
 									HorizontalOptions="Fill"
 									Stroke="Transparent"
 									StrokeThickness="0">
@@ -584,23 +542,21 @@
 								</Grid>
 							</Border>
 
-							<HorizontalStackLayout
-								IsVisible="{Binding ShowStatusFooterTip}"
-								Spacing="10">
-								<Label
-									FontSize="18"
-									Text="ⓘ"
-									TextColor="{StaticResource Gray500}"
-									VerticalOptions="Start" />
-								<Label LineBreakMode="WordWrap" TextColor="{DynamicResource SaphBoletimTitle}">
-									<Label.FormattedText>
-										<FormattedString>
-											<Span FontAttributes="Bold" Text="Dica Importante: " />
-											<Span Text="Preencha as informações do Boletim APH antes de concluir a missão." />
-										</FormattedString>
-									</Label.FormattedText>
-								</Label>
-							</HorizontalStackLayout>
+							<controls:SaphBoletimFooterTip IsVisible="{Binding ShowStatusFooterTip}" />
+
+							<Button
+								Margin="0,8,0,0"
+								BackgroundColor="{StaticResource SaphBoletimTeal}"
+								Command="{Binding AtualizarEnderecoCommand}"
+								CornerRadius="14"
+								FontAttributes="Bold"
+								FontSize="15"
+								HorizontalOptions="Fill"
+								IsVisible="{Binding ShowAtualizarEnderecoButton}"
+								MinimumHeightRequest="48"
+								Padding="16,12"
+								Text="Atualizar endereço"
+								TextColor="{DynamicResource SaphOnActionButton}" />
 
 							<Button
 								Margin="0,8,0,0"
@@ -661,17 +617,10 @@
 						MinimumHeightRequest="50"
 						Padding="12,14"
 						Text="VISUALIZAR ÚLTIMO REGISTRO"
-						TextColor="White" />
+						TextColor="{DynamicResource SaphOnActionButton}" />
 
 					<!-- Endereço + referência -->
-					<Border
-						Padding="14,14"
-						BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-						Stroke="#2C2C2E"
-						StrokeThickness="1">
-						<Border.StrokeShape>
-							<RoundRectangle CornerRadius="10" />
-						</Border.StrokeShape>
+					<Border Style="{StaticResource SaphChamadoInfoCard}">
 						<Grid
 							ColumnDefinitions="Auto,*"
 							ColumnSpacing="12"
@@ -684,27 +633,12 @@
 								VerticalOptions="Start" />
 							<Grid Grid.Column="1" RowDefinitions="Auto,Auto" RowSpacing="10">
 								<VerticalStackLayout Grid.Row="0" Spacing="4">
-									<Label
-										FontSize="12"
-										Text="Endereço"
-										TextColor="{DynamicResource SaphTextSecondary}" />
-									<Label
-										FontAttributes="Bold"
-										FontSize="15"
-										LineBreakMode="WordWrap"
-										Text="{Binding ChamadoEndereco}"
-										TextColor="{DynamicResource SaphListTitle}" />
+									<Label Style="{StaticResource SaphChamadoCaption}" Text="Endereço" />
+									<Label Style="{StaticResource SaphChamadoValue}" Text="{Binding ChamadoEndereco}" />
 								</VerticalStackLayout>
 								<VerticalStackLayout Grid.Row="1" Spacing="4">
-									<Label
-										FontSize="12"
-										Text="Referência"
-										TextColor="{DynamicResource SaphTextSecondary}" />
-									<Label
-										FontAttributes="Bold"
-										FontSize="15"
-										Text="{Binding ChamadoReferencia}"
-										TextColor="{DynamicResource SaphListTitle}" />
+									<Label Style="{StaticResource SaphChamadoCaption}" Text="Referência" />
+									<Label Style="{StaticResource SaphChamadoValue}" Text="{Binding ChamadoReferencia}" />
 								</VerticalStackLayout>
 							</Grid>
 						</Grid>
@@ -712,15 +646,7 @@
 
 					<!-- Acionamento | Chamado -->
 					<Grid ColumnDefinitions="*,*" ColumnSpacing="10" RowSpacing="0">
-						<Border
-							Grid.Column="0"
-							Padding="12,12"
-							BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-							Stroke="#2C2C2E"
-							StrokeThickness="1">
-							<Border.StrokeShape>
-								<RoundRectangle CornerRadius="10" />
-							</Border.StrokeShape>
+						<Border Grid.Column="0" Style="{StaticResource SaphChamadoInfoCardCompact}">
 							<VerticalStackLayout Spacing="8">
 								<Image
 									Aspect="AspectFit"
@@ -729,26 +655,11 @@
 									VerticalOptions="Start"
 									WidthRequest="24"
 									Source="status_sirene.png" />
-								<Label
-									FontSize="12"
-									Text="Acionamento"
-									TextColor="{DynamicResource SaphTextSecondary}" />
-								<Label
-									FontAttributes="Bold"
-									FontSize="15"
-									Text="{Binding ChamadoAcionamento}"
-									TextColor="{DynamicResource SaphListTitle}" />
+								<Label Style="{StaticResource SaphChamadoCaption}" Text="Acionamento" />
+								<Label Style="{StaticResource SaphChamadoValue}" Text="{Binding ChamadoAcionamento}" />
 							</VerticalStackLayout>
 						</Border>
-						<Border
-							Grid.Column="1"
-							Padding="12,12"
-							BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-							Stroke="#2C2C2E"
-							StrokeThickness="1">
-							<Border.StrokeShape>
-								<RoundRectangle CornerRadius="10" />
-							</Border.StrokeShape>
+						<Border Grid.Column="1" Style="{StaticResource SaphChamadoInfoCardCompact}">
 							<VerticalStackLayout Spacing="8">
 								<Image
 									Aspect="AspectFit"
@@ -756,28 +667,14 @@
 									HorizontalOptions="Start"
 									Source="status_pin.png"
 									WidthRequest="24" />
-								<Label
-									FontSize="12"
-									Text="Chamado"
-									TextColor="{DynamicResource SaphTextSecondary}" />
-								<Label
-									FontAttributes="Bold"
-									FontSize="15"
-									Text="{Binding ChamadoNumeroOcorrencia}"
-									TextColor="{DynamicResource SaphListTitle}" />
+								<Label Style="{StaticResource SaphChamadoCaption}" Text="Chamado" />
+								<Label Style="{StaticResource SaphChamadoValue}" Text="{Binding ChamadoNumeroOcorrencia}" />
 							</VerticalStackLayout>
 						</Border>
 					</Grid>
 
 					<!-- Paciente -->
-					<Border
-						Padding="14,14"
-						BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-						Stroke="#2C2C2E"
-						StrokeThickness="1">
-						<Border.StrokeShape>
-							<RoundRectangle CornerRadius="10" />
-						</Border.StrokeShape>
+					<Border Style="{StaticResource SaphChamadoInfoCard}">
 						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
 							<Label
 								Grid.Column="0"
@@ -785,29 +682,14 @@
 								Text="{Binding PatientEmoji}"
 								VerticalOptions="Start" />
 							<VerticalStackLayout Grid.Column="1" Spacing="4">
-								<Label
-									FontSize="12"
-									Text="Paciente"
-									TextColor="{DynamicResource SaphTextSecondary}" />
-								<Label
-									FontAttributes="Bold"
-									FontSize="15"
-									LineBreakMode="WordWrap"
-									Text="{Binding ChamadoPatientLine}"
-									TextColor="{DynamicResource SaphListTitle}" />
+								<Label Style="{StaticResource SaphChamadoCaption}" Text="Paciente" />
+								<Label Style="{StaticResource SaphChamadoValue}" Text="{Binding ChamadoPatientLine}" />
 							</VerticalStackLayout>
 						</Grid>
 					</Border>
 
 					<!-- Atendimento -->
-					<Border
-						Padding="14,14"
-						BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-						Stroke="#2C2C2E"
-						StrokeThickness="1">
-						<Border.StrokeShape>
-							<RoundRectangle CornerRadius="10" />
-						</Border.StrokeShape>
+					<Border Style="{StaticResource SaphChamadoInfoCard}">
 						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
 							<Image
 								Grid.Column="0"
@@ -817,158 +699,45 @@
 								WidthRequest="26"
 								Source="status_ambulancia.png" />
 							<VerticalStackLayout Grid.Column="1" Spacing="4">
-								<Label
-									FontSize="12"
-									Text="Atendimento"
-									TextColor="{DynamicResource SaphTextSecondary}" />
-								<Label
-									FontAttributes="Bold"
-									FontSize="15"
-									LineBreakMode="WordWrap"
-									Text="{Binding ChamadoAtendimento}"
-									TextColor="{DynamicResource SaphListTitle}" />
+								<Label Style="{StaticResource SaphChamadoCaption}" Text="Atendimento" />
+								<Label Style="{StaticResource SaphChamadoValue}" Text="{Binding ChamadoAtendimento}" />
 							</VerticalStackLayout>
 						</Grid>
 					</Border>
 
 					<!-- Orientação da regulação -->
-					<Border
-						Padding="14,14"
-						BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-						Stroke="#2C2C2E"
-						StrokeThickness="1">
-						<Border.StrokeShape>
-							<RoundRectangle CornerRadius="10" />
-						</Border.StrokeShape>
-						<VerticalStackLayout Spacing="4">
-							<Label
-								FontSize="12"
-								Text="Orientação da Regulação"
-								TextColor="{DynamicResource SaphTextSecondary}" />
-							<Label
-								FontAttributes="Bold"
-								FontSize="15"
-								LineBreakMode="WordWrap"
-								Text="{Binding ChamadoOrientacaoRegulacao}"
-								TextColor="{DynamicResource SaphListTitle}" />
-						</VerticalStackLayout>
-					</Border>
+					<controls:SaphInfoCard
+						Caption="Orientação da Regulação"
+						Value="{Binding ChamadoOrientacaoRegulacao}" />
 
 					<!-- Apoio por -->
-					<Border
-						Padding="14,14"
-						BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-						Stroke="#2C2C2E"
-						StrokeThickness="1">
-						<Border.StrokeShape>
-							<RoundRectangle CornerRadius="10" />
-						</Border.StrokeShape>
-						<VerticalStackLayout Spacing="4">
-							<Label
-								FontSize="12"
-								Text="Apoio por"
-								TextColor="{DynamicResource SaphTextSecondary}" />
-							<Label
-								FontAttributes="Bold"
-								FontSize="15"
-								Text="{Binding ChamadoApoioPor}"
-								TextColor="{DynamicResource SaphListTitle}" />
-						</VerticalStackLayout>
-					</Border>
+					<controls:SaphInfoCard
+						Caption="Apoio por"
+						Value="{Binding ChamadoApoioPor}" />
 
 					<!-- Tipo de cliente | Código do cliente -->
 					<Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-						<Border
+						<controls:SaphInfoCard
 							Grid.Column="0"
-							Padding="12,12"
-							BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-							Stroke="#2C2C2E"
-							StrokeThickness="1">
-							<Border.StrokeShape>
-								<RoundRectangle CornerRadius="10" />
-							</Border.StrokeShape>
-							<VerticalStackLayout Spacing="4">
-								<Label
-									FontSize="12"
-									Text="Tipo de Cliente"
-									TextColor="{DynamicResource SaphTextSecondary}" />
-								<Label
-									FontAttributes="Bold"
-									FontSize="15"
-									LineBreakMode="WordWrap"
-									Text="{Binding ChamadoTipoCliente}"
-									TextColor="{DynamicResource SaphListTitle}" />
-							</VerticalStackLayout>
-						</Border>
-						<Border
+							Caption="Tipo de Cliente"
+							Value="{Binding ChamadoTipoCliente}" />
+						<controls:SaphInfoCard
 							Grid.Column="1"
-							Padding="12,12"
-							BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-							Stroke="#2C2C2E"
-							StrokeThickness="1">
-							<Border.StrokeShape>
-								<RoundRectangle CornerRadius="10" />
-							</Border.StrokeShape>
-							<VerticalStackLayout Spacing="4">
-								<Label
-									FontSize="12"
-									Text="Código do Cliente"
-									TextColor="{DynamicResource SaphTextSecondary}" />
-								<Label
-									FontAttributes="Bold"
-									FontSize="15"
-									Text="{Binding ChamadoCodigoCliente}"
-									TextColor="{DynamicResource SaphListTitle}" />
-							</VerticalStackLayout>
-						</Border>
+							Caption="Código do Cliente"
+							Value="{Binding ChamadoCodigoCliente}" />
 					</Grid>
 
 					<!-- Descrição do evento | Data/hora -->
 					<Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,0,0,8">
-						<Border
+						<controls:SaphInfoCard
 							Grid.Column="0"
-							Padding="12,12"
-							BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-							Stroke="#2C2C2E"
-							StrokeThickness="1">
-							<Border.StrokeShape>
-								<RoundRectangle CornerRadius="10" />
-							</Border.StrokeShape>
-							<VerticalStackLayout Spacing="4">
-								<Label
-									FontSize="12"
-									Text="Descrição do Evento"
-									TextColor="{DynamicResource SaphTextSecondary}" />
-								<Label
-									FontAttributes="Bold"
-									FontSize="15"
-									LineBreakMode="WordWrap"
-									Text="{Binding ChamadoDescricaoEvento}"
-									TextColor="{DynamicResource SaphListTitle}" />
-							</VerticalStackLayout>
-						</Border>
-						<Border
+							Caption="Descrição do Evento"
+							Value="{Binding ChamadoDescricaoEvento}" />
+						<controls:SaphInfoCard
 							Grid.Column="1"
-							Padding="12,12"
-							BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-							Stroke="#2C2C2E"
-							StrokeThickness="1">
-							<Border.StrokeShape>
-								<RoundRectangle CornerRadius="10" />
-							</Border.StrokeShape>
-							<VerticalStackLayout Spacing="4">
-								<Label
-									FontSize="12"
-									Text="Data/Hora do Evento"
-									TextColor="{DynamicResource SaphTextSecondary}" />
-								<Label
-									FontAttributes="Bold"
-									FontSize="14"
-									LineBreakMode="WordWrap"
-									Text="{Binding ChamadoDataHoraEvento}"
-									TextColor="{DynamicResource SaphListTitle}" />
-							</VerticalStackLayout>
-						</Border>
+							Caption="Data/Hora do Evento"
+							Value="{Binding ChamadoDataHoraEvento}"
+							ValueFontSize="14" />
 					</Grid>
 
 					<!-- Dica: troféu + faixa teal + caixa -->
@@ -1013,12 +782,12 @@
 									FontAttributes="Bold"
 									FontSize="15"
 									Text="{Binding ChamadoDicaTitulo}"
-									TextColor="Black" />
+									TextColor="{StaticResource SaphTextPrimary}" />
 								<Label
 									FontSize="14"
 									LineBreakMode="WordWrap"
 									Text="{Binding ChamadoDicaTexto}"
-									TextColor="Black" />
+									TextColor="{StaticResource SaphTextPrimary}" />
 							</VerticalStackLayout>
 						</Border>
 					</Grid>
@@ -1061,26 +830,7 @@
 					</CollectionView.Header>
 
 					<CollectionView.Footer>
-						<HorizontalStackLayout
-							Padding="20,8,20,28"
-							Spacing="10">
-							<Label
-								FontSize="18"
-								Text="ⓘ"
-								TextColor="{StaticResource Gray500}"
-								VerticalOptions="Start" />
-							<Label
-								LineBreakMode="WordWrap"
-								TextColor="{DynamicResource SaphBoletimTitle}"
-								VerticalOptions="Center">
-								<Label.FormattedText>
-									<FormattedString>
-										<Span FontAttributes="Bold" Text="Dica Importante: " />
-										<Span Text="Preencha as informações do Boletim APH antes de concluir a missão." />
-									</FormattedString>
-								</Label.FormattedText>
-							</Label>
-						</HorizontalStackLayout>
+						<controls:SaphBoletimFooterTip Padding="20,8,20,28" />
 					</CollectionView.Footer>
 
 					<CollectionView.ItemTemplate>
@@ -1157,8 +907,8 @@
 					<VerticalStackLayout Padding="16,8,16,20" Spacing="16">
 						<Border
 							Padding="14,12"
-							BackgroundColor="#252525"
-							Stroke="#3A3A3C"
+							BackgroundColor="{DynamicResource SaphPrescricaoCardBg}"
+							Stroke="{DynamicResource SaphBoletimCardStroke}"
 							StrokeThickness="1">
 							<Border.StrokeShape>
 								<RoundRectangle CornerRadius="16" />
@@ -1186,39 +936,32 @@
 								<DataTemplate x:DataType="models:PrescricaoAtivaItem">
 									<Border
 										Padding="0,0,0,0"
-										BackgroundColor="{StaticResource SaphPrescricaoCardBg}"
-										Stroke="#2C2C2E"
+										BackgroundColor="{DynamicResource SaphPrescricaoCardBg}"
+										Stroke="{DynamicResource SaphBoletimCardStroke}"
 										StrokeThickness="1">
 										<Border.StrokeShape>
 											<RoundRectangle CornerRadius="16" />
 										</Border.StrokeShape>
-										<Grid ColumnDefinitions="4,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="4">
+										<Grid ColumnDefinitions="4,*" RowDefinitions="Auto,Auto" RowSpacing="4">
 											<BoxView
-												Grid.RowSpan="3"
+												Grid.RowSpan="2"
 												Grid.Column="0"
 												WidthRequest="4"
 												Color="{StaticResource SaphBoletimTeal}"
 												VerticalOptions="Fill" />
-											<Label
-												Grid.Row="0"
-												Grid.Column="1"
-												Padding="12,12,12,0"
-												FontAttributes="Bold"
-												FontSize="15"
-												Text="{Binding TituloCategoria}"
-												TextColor="{DynamicResource SaphListTitle}" />
 											<Grid
-												Grid.Row="1"
+												Grid.Row="0"
 												Grid.Column="1"
 												ColumnDefinitions="*,Auto"
 												ColumnSpacing="4"
-												Padding="12,0,8,0">
+												Padding="12,12,8,0">
 												<Label
 													Grid.Column="0"
-													FontSize="14"
+													FontAttributes="Bold"
+													FontSize="15"
 													LineBreakMode="WordWrap"
-													Text="{Binding DetalheLinha}"
-													TextColor="{StaticResource SaphBoletimTeal}" />
+													Text="{Binding TextoLinha}"
+													TextColor="{DynamicResource SaphListTitle}" />
 												<Label
 													Grid.Column="1"
 													FontSize="20"
@@ -1227,9 +970,8 @@
 													VerticalOptions="Start" />
 											</Grid>
 											<HorizontalStackLayout
-												Grid.Row="2"
-												Grid.Column="0"
-												Grid.ColumnSpan="2"
+												Grid.Row="1"
+												Grid.Column="1"
 												Padding="12,0,12,10"
 												HorizontalOptions="End"
 												Spacing="4"
@@ -1268,7 +1010,7 @@
 								<DataTemplate x:DataType="models:SemPrescricaoItem">
 									<Grid
 										RowDefinitions="Auto,1"
-										BackgroundColor="#1C1C1E"
+										BackgroundColor="{DynamicResource SaphPrescricaoCardBg}"
 										ColumnDefinitions="*,Auto"
 										ColumnSpacing="8"
 										Padding="12,10,12,0">
@@ -1295,7 +1037,7 @@
 											Grid.ColumnSpan="2"
 											HeightRequest="1"
 											Margin="0,8,0,0"
-											Color="#3A3A3C" />
+											Color="{DynamicResource SaphListDivider}" />
 									</Grid>
 								</DataTemplate>
 							</CollectionView.ItemTemplate>
@@ -1317,7 +1059,7 @@
 						FontSize="15"
 						Padding="12,14"
 						Text="PRESCREVER"
-						TextColor="White" />
+						TextColor="{DynamicResource SaphOnActionButton}" />
 					<Button
 						Grid.Column="1"
 						BackgroundColor="{StaticResource SaphBoletimTeal}"
@@ -1327,7 +1069,7 @@
 						FontSize="15"
 						Padding="12,14"
 						Text="CONSUMIR"
-						TextColor="White" />
+						TextColor="{DynamicResource SaphOnActionButton}" />
 				</Grid>
 			</Grid>
 
@@ -1342,5 +1084,33 @@
 					MapType="Street" />
 			</Grid>
 		</Grid>
+
+		<!-- Toast de sucesso — overlay em baixo (visível em qualquer aba) -->
+		<Border
+			Grid.Row="0"
+			Grid.RowSpan="4"
+			Margin="16,0,16,28"
+			Padding="16,14"
+			BackgroundColor="{StaticResource SaphBoletimCheckGreen}"
+			HorizontalOptions="Fill"
+			InputTransparent="True"
+			IsVisible="{Binding ShowSuccessToast}"
+			MinimumHeightRequest="48"
+			StrokeThickness="0"
+			VerticalOptions="End">
+			<Border.StrokeShape>
+				<RoundRectangle CornerRadius="12" />
+			</Border.StrokeShape>
+			<Border.Shadow>
+				<Shadow Brush="Black" Opacity="0.35" Radius="10" Offset="0,4" />
+			</Border.Shadow>
+			<Label
+				FontAttributes="Bold"
+				FontSize="16"
+				HorizontalTextAlignment="Center"
+				Text="{Binding SuccessToastText}"
+				TextColor="{DynamicResource SaphOnActionButton}"
+				VerticalOptions="Center" />
+		</Border>
 	</Grid>
 </ContentPage>

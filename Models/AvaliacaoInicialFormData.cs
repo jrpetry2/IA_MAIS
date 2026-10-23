@@ -1,10 +1,7 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 namespace SaphMovel.Models;
 
 /// <summary>Estado em memória do formulário Avaliação Inicial (Boletim APH).</summary>
-public sealed class AvaliacaoInicialFormData : INotifyPropertyChanged
+public sealed class AvaliacaoInicialFormData : ObservableModel
 {
 	string _reporteChegada = string.Empty;
 	string _viasAereas = string.Empty;
@@ -56,17 +53,16 @@ public sealed class AvaliacaoInicialFormData : INotifyPropertyChanged
 		set => SetField(ref _respostaVerbal, value);
 	}
 
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	void OnPropertyChanged([CallerMemberName] string? name = null) =>
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-	bool SetField<T>(ref T field, T value, [CallerMemberName] string? name = null)
+	/// <summary>Limpa o formulário (novo atendimento / desvio de missão).</summary>
+	public void Reset()
 	{
-		if (EqualityComparer<T>.Default.Equals(field, value))
-			return false;
-		field = value;
-		OnPropertyChanged(name);
-		return true;
+		ReporteChegada = string.Empty;
+		ViasAereas = string.Empty;
+		Respiracao = string.Empty;
+		Circulacao = string.Empty;
+		AberturaOcular = string.Empty;
+		RespostaMotora = string.Empty;
+		RespostaVerbal = string.Empty;
 	}
+
 }

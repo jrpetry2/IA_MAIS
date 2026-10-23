@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using SaphMovel.Models;
+using SaphMovel.Services.Json;
 
 namespace SaphMovel.Services.SinaisVitais;
 
@@ -11,10 +11,6 @@ namespace SaphMovel.Services.SinaisVitais;
 /// </summary>
 public static class SinaisVitaisJsonMapper
 {
-	static readonly Regex UnquotedKeyRegex = new(
-		@"([{,]\s*)([A-Za-z_][A-Za-z0-9_]*)\s*:",
-		RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
 	/// <summary>Extra de Intent Android (<c>GetStringExtra</c>).</summary>
 	public const string AndroidIntentExtraName = "sinais_vitais_json";
 
@@ -74,16 +70,15 @@ public static class SinaisVitaisJsonMapper
 			form.Glasgow = FormatValue(payload.Glasgow.Value);
 		if (payload.Rts.HasValue)
 			form.Rts = FormatValue(payload.Rts.Value);
-        if (payload.Pts.HasValue)
-            form.Pts = FormatValue(payload.Pts.Value);
-        if (!string.IsNullOrEmpty(payload.Evolucao))
-            form.Evolucao = payload.Evolucao;
-
-    }
+		if (payload.Pts.HasValue)
+			form.Pts = FormatValue(payload.Pts.Value);
+		if (!string.IsNullOrEmpty(payload.Evolucao))
+			form.Evolucao = payload.Evolucao;
+	}
 
 	internal static SinaisVitaisPayload ParsePayload(string raw)
 	{
-		var normalized = NormalizeToStandardJson(raw);
+		var normalized = LenientJson.NormalizeToStandardJson(raw);
 		using var doc = JsonDocument.Parse(normalized);
 		var root = doc.RootElement;
 		if (root.ValueKind != JsonValueKind.Object)
@@ -97,11 +92,11 @@ public static class SinaisVitaisJsonMapper
 
 			if (prop.Value.ValueKind == JsonValueKind.String)
 			{
-				AssignValue(payload, canonical, prop.Value.GetString());
+				AssignValue(payload, canonical, prop.Value.GetString() ?? "");
 				continue;
 			}
 
-            if (!TryReadNumber(prop.Value, out var value))
+			if (!TryReadNumber(prop.Value, out var value))
 				continue;
 
 			AssignValue(payload, canonical, value);
@@ -141,13 +136,13 @@ public static class SinaisVitaisJsonMapper
 			case SinaisVitaisKeyAliases.Rts:
 				payload.Rts = (double)value;
 				break;
-            case SinaisVitaisKeyAliases.Pts:
-                payload.Pts = (double)value;
-                break;
-            case SinaisVitaisKeyAliases.Evolucao:
-                payload.Evolucao = (string)value;
-                break;
-        }
+			case SinaisVitaisKeyAliases.Pts:
+				payload.Pts = (double)value;
+				break;
+			case SinaisVitaisKeyAliases.Evolucao:
+				payload.Evolucao = (string)value;
+				break;
+		}
 	}
 
 	static bool TryReadNumber(JsonElement el, out double value)
@@ -180,18 +175,6 @@ public static class SinaisVitaisJsonMapper
 	static bool PayloadHasAnyValue(SinaisVitaisPayload p) =>
 		p.Pas.HasValue || p.Pad.HasValue || p.Fc.HasValue || p.Fr.HasValue || p.Sat.HasValue
 		|| p.Temp.HasValue || p.Hgt.HasValue || p.Glasgow.HasValue || p.Rts.HasValue || p.Pts.HasValue || !string.IsNullOrEmpty(p.Evolucao);
-
-	internal static string NormalizeToStandardJson(string raw)
-	{
-		var s = raw.Trim();
-		if (s.Length == 0)
-			return s;
-		if (!s.StartsWith('{'))
-			s = "{" + s;
-		if (!s.EndsWith('}'))
-			s += "}";
-		return UnquotedKeyRegex.Replace(s, m => $"{m.Groups[1].Value}\"{m.Groups[2].Value}\":");
-	}
 
 	static string FormatValue(double value)
 	{

@@ -3,66 +3,39 @@
 	x:Class="SaphMovel.Pages.SinaisVitaisPage"
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:conv="clr-namespace:SaphMovel.Converters"
-	Title="Sinais Vitais"
-	BackgroundColor="#0F1211"
-	Shell.NavBarIsVisible="False">
-
-	<ContentPage.Resources>
-		<conv:InvertedBoolConverter x:Key="InvBool" />
-		<conv:BoolToOpacityConverter x:Key="BoolOpacity" />
-	</ContentPage.Resources>
+	xmlns:controls="clr-namespace:SaphMovel.Controls"
+	xmlns:vm="clr-namespace:SaphMovel.ViewModels"
+	x:DataType="vm:SinaisVitaisViewModel"
+	Style="{StaticResource SaphModalPage}"
+	Title="Sinais Vitais">
 
 	<Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
 		<Grid
 			Grid.Row="0"
-			Padding="4,8,12,8"
 			ColumnDefinitions="Auto,*"
-			BackgroundColor="#000000">
+			Style="{StaticResource SaphModalHeaderBar}">
 			<Button
 				Grid.Column="0"
-				Padding="12,8"
-				BackgroundColor="Transparent"
 				Command="{Binding VoltarCommand}"
-				FontSize="22"
-				Text="←"
-				TextColor="White" />
+				Style="{StaticResource SaphModalBackButton}"
+				Text="←" />
 			<Label
 				Grid.Column="1"
-				FontAttributes="Bold"
-				FontSize="18"
-				Text="Sinais Vitais"
-				TextColor="White"
-				VerticalOptions="Center" />
+				Style="{StaticResource SaphModalTitle}"
+				Text="Sinais Vitais" />
 		</Grid>
 
-		<Border
-			Grid.Row="1"
-			Margin="16,8,16,0"
-			Padding="14,12"
-			BackgroundColor="#0A0A0A"
-			Stroke="#66FFFFFF"
-			StrokeThickness="1">
-			<Border.StrokeShape>
-				<RoundRectangle CornerRadius="16" />
-			</Border.StrokeShape>
+		<Border Grid.Row="1" Style="{StaticResource SaphPatientCard}">
 			<HorizontalStackLayout Spacing="10">
 				<Label FontSize="22" Text="{Binding PatientEmoji}" VerticalOptions="Center" />
-				<Label
-					FontAttributes="Bold"
-					FontSize="15"
-					Text="{Binding PatientSummary}"
-					TextColor="White"
-					VerticalOptions="Center" />
+				<Label Style="{StaticResource SaphPatientSummary}" Text="{Binding PatientSummary}" />
 			</HorizontalStackLayout>
 		</Border>
 
 		<Label
 			Grid.Row="2"
-			Margin="20,10,20,6"
-			FontSize="11"
-			Text="* CAMPO OBRIGATÓRIO"
-			TextColor="#E57373" />
+			Style="{StaticResource SaphRequiredHint}"
+			Text="* CAMPO OBRIGATÓRIO" />
 
 		<ScrollView Grid.Row="3">
 			<VerticalStackLayout Padding="16,0,16,24" Spacing="14">
@@ -73,221 +46,120 @@
 					RowSpacing="12">
 					<!-- Linha 1 -->
 					<VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="4">
-						<Label FontSize="12" Text="PAS" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="PAS" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.Pas}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Pas}" />
 					</VerticalStackLayout>
 					<VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="4">
-						<Label FontSize="12" Text="PAD" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="PAD" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.Pad}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Pad}" />
 					</VerticalStackLayout>
 					<VerticalStackLayout Grid.Row="0" Grid.Column="2" Spacing="4">
-						<Label FontSize="12" Text="FC" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="FC" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.Fc}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Fc}" />
 					</VerticalStackLayout>
 					<!-- Linha 2 -->
 					<VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="4">
-						<Label FontSize="12" Text="FR" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="FR" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.Fr}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Fr}" />
 					</VerticalStackLayout>
 					<VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="4">
-						<Label FontSize="12" Text="Sat. O₂" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="Sat. O₂" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.SatO2}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.SatO2}" />
 					</VerticalStackLayout>
 					<VerticalStackLayout Grid.Row="1" Grid.Column="2" Spacing="4">
-						<Label FontSize="12" Text="Temp.Ax" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="Temp.Ax" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.TempAx}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.TempAx}" />
 					</VerticalStackLayout>
 					<!-- Linha 3 -->
 					<VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="4">
-						<Label FontSize="12" Text="HGT" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="HGT" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.Hgt}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Hgt}" />
 					</VerticalStackLayout>
 					<VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="4">
-						<Label FontSize="12" Text="Glasgow" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="Glasgow" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.Glasgow}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Glasgow}" />
 					</VerticalStackLayout>
 					<VerticalStackLayout Grid.Row="2" Grid.Column="2" Spacing="4">
-						<Label FontSize="12" Text="RTS" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="RTS" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.Rts}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Rts}" />
 					</VerticalStackLayout>
 					<!-- Linha 4 -->
 					<VerticalStackLayout Grid.Row="3" Grid.Column="0" Spacing="4">
-						<Label FontSize="12" Text="PTS" TextColor="White" />
+						<Label Style="{StaticResource SaphFieldCaption}" Text="PTS" />
 						<Entry
-							BackgroundColor="#1A1A1A"
 							Keyboard="Numeric"
 							Placeholder="—"
-							PlaceholderColor="#6B7280"
-							Text="{Binding Form.Pts}"
-							TextColor="White" />
+							Style="{StaticResource SaphFieldEntry}"
+							Text="{Binding Form.Pts}" />
 					</VerticalStackLayout>
 				</Grid>
 
 				<VerticalStackLayout Spacing="6">
-					<Label FontSize="12" Text="Evolução" TextColor="White" />
+					<Label Style="{StaticResource SaphFieldCaption}" Text="Evolução" />
 					<Editor
 						AutoSize="TextChanges"
-						BackgroundColor="#1A1A1A"
 						MinimumHeightRequest="140"
 						Placeholder="Descreva a evolução..."
-						PlaceholderColor="#6B7280"
-						Text="{Binding Form.Evolucao}"
-						TextColor="White" />
+						Style="{StaticResource SaphFieldEditor}"
+						Text="{Binding Form.Evolucao}" />
 				</VerticalStackLayout>
 
-				<VerticalStackLayout Margin="0,8,0,0" Spacing="8">
-					<!-- Pressionar = gravar, soltar = parar (toque nativo Android em SinaisVitaisPage.xaml.cs). -->
-					<Border
-						x:Name="OuvirPressArea"
-						BackgroundColor="Transparent"
-						IsEnabled="{Binding IsTranscribing, Converter={StaticResource InvBool}}"
-						MinimumHeightRequest="52"
-						StrokeThickness="0">
-						<Button
-							x:Name="OuvirButton"
-							Padding="16,14"
-							BackgroundColor="#24B2A1"
-							CornerRadius="10"
-							FontAttributes="Bold"
-							FontSize="15"
-							HorizontalOptions="Fill"
-							InputTransparent="True"
-							IsEnabled="{Binding IsTranscribing, Converter={StaticResource InvBool}}"
-							MinimumHeightRequest="52"
-							Text="OUVIR"
-							TextColor="White" />
-					</Border>
-					<Border
-						Padding="12,10"
-						BackgroundColor="#33C62828"
-						HeightRequest="48"
-						InputTransparent="True"
-						Opacity="{Binding IsOuvirRecording, Converter={StaticResource BoolOpacity}}"
-						Stroke="#C62828"
-						StrokeThickness="1">
-						<Border.StrokeShape>
-							<RoundRectangle CornerRadius="10" />
-						</Border.StrokeShape>
-						<HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
-							<Ellipse
-								HeightRequest="10"
-								VerticalOptions="Center"
-								WidthRequest="10"
-								Fill="#C62828" />
-							<Label
-								FontAttributes="Bold"
-								FontSize="13"
-								Text="{Binding OuvirHintText}"
-								TextColor="#FFCDD2"
-								VerticalOptions="Center" />
-						</HorizontalStackLayout>
-					</Border>
-					<Border
-						Padding="12,10"
-						BackgroundColor="#3324B2A1"
-						IsVisible="{Binding IsTranscribing}"
-						Stroke="#24B2A1"
-						StrokeThickness="1">
-						<Border.StrokeShape>
-							<RoundRectangle CornerRadius="10" />
-						</Border.StrokeShape>
-						<HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
-							<ActivityIndicator
-								Color="#24B2A1"
-								IsRunning="{Binding IsTranscribing}"
-								VerticalOptions="Center" />
-							<Label
-								FontAttributes="Bold"
-								FontSize="13"
-								Text="{Binding OuvirHintText}"
-								TextColor="#B2DFDB"
-								VerticalOptions="Center" />
-						</HorizontalStackLayout>
-					</Border>
-				</VerticalStackLayout>
+				<controls:OuvirPanel x:Name="OuvirPanel" />
 			</VerticalStackLayout>
 		</ScrollView>
 
 		<Grid
 			Grid.Row="4"
-			Padding="16,12,16,20"
 			ColumnDefinitions="*,*"
-			ColumnSpacing="12"
-			BackgroundColor="#0A0D0C">
+			Style="{StaticResource SaphModalFooterBar}">
 			<Button
 				Grid.Column="0"
-				Padding="12,14"
-				BackgroundColor="Transparent"
-				BorderColor="White"
-				BorderWidth="1"
 				Command="{Binding VoltarCommand}"
-				CornerRadius="10"
-				FontAttributes="Bold"
-				Text="VOLTAR"
-				TextColor="White" />
+				SemanticProperties.Description="Voltar sem guardar"
+				Style="{StaticResource SaphSecondaryActionButton}"
+				Text="VOLTAR" />
 			<Button
 				Grid.Column="1"
-				Padding="12,14"
-				BackgroundColor="#24B2A1"
 				Command="{Binding EnviarCommand}"
-				CornerRadius="10"
-				FontAttributes="Bold"
-				Text="ENVIAR"
-				TextColor="White" />
+				SemanticProperties.Description="Enviar sinais vitais"
+				Style="{StaticResource SaphActionButton}"
+				Text="ENVIAR" />
 		</Grid>
 	</Grid>
 </ContentPage>

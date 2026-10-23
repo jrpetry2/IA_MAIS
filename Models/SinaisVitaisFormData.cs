@@ -1,10 +1,7 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 namespace SaphMovel.Models;
 
 /// <summary>Estado em memória do formulário Sinais Vitais (Boletim APH).</summary>
-public sealed class SinaisVitaisFormData : INotifyPropertyChanged
+public sealed class SinaisVitaisFormData : ObservableModel
 {
 	string _pas = string.Empty;
 	string _pad = string.Empty;
@@ -84,17 +81,20 @@ public sealed class SinaisVitaisFormData : INotifyPropertyChanged
 		set => SetField(ref _evolucao, value);
 	}
 
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	void OnPropertyChanged([CallerMemberName] string? name = null) =>
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-	bool SetField<T>(ref T field, T value, [CallerMemberName] string? name = null)
+	/// <summary>Limpa o formulário (novo atendimento / desvio de missão).</summary>
+	public void Reset()
 	{
-		if (EqualityComparer<T>.Default.Equals(field, value))
-			return false;
-		field = value;
-		OnPropertyChanged(name);
-		return true;
+		Pas = string.Empty;
+		Pad = string.Empty;
+		Fc = string.Empty;
+		Fr = string.Empty;
+		SatO2 = string.Empty;
+		TempAx = string.Empty;
+		Hgt = string.Empty;
+		Glasgow = string.Empty;
+		Rts = string.Empty;
+		Pts = string.Empty;
+		Evolucao = string.Empty;
 	}
+
 }

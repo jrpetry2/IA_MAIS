@@ -1,9 +1,6 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 namespace SaphMovel.Models;
 
-public sealed class BoletimRowItem : INotifyPropertyChanged
+public sealed class BoletimRowItem : ObservableModel
 {
 	bool _isCompleted;
 
@@ -14,17 +11,6 @@ public sealed class BoletimRowItem : INotifyPropertyChanged
 	public bool IsCompleted
 	{
 		get => _isCompleted;
-		set
-		{
-			if (_isCompleted == value)
-				return;
-			_isCompleted = value;
-			OnPropertyChanged();
-		}
+		set => SetField(ref _isCompleted, value);
 	}
-
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	void OnPropertyChanged([CallerMemberName] string? name = null) =>
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
