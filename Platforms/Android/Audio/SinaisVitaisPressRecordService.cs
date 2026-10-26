@@ -187,6 +187,12 @@ public sealed class SinaisVitaisPressRecordService : IPressHoldAudioRecordServic
 		await ResumeVoskIfStoppedAsync().ConfigureAwait(false);
 	}
 
+	public int ReadMaxAmplitude()
+	{
+		lock (_gate)
+			return _recording ? _capture?.ReadMaxAmplitude() ?? 0 : 0;
+	}
+
 	/// <summary>Vosk só reactiva quando o utilizador já não está a gravar (evita disputa no microfone).</summary>
 	async Task ResumeVoskIfStoppedAsync()
 	{

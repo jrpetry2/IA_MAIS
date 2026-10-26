@@ -178,10 +178,12 @@ public sealed partial class MainViewModel
 
 	public IReadOnlyList<(string OriginalTitle, string NormalizedTitle)> GetVoiceCommandEntries()
 	{
-		var list = new List<(string, string)>(MenuItems.Count + 3 + ProtocoloAtendimentoCatalog.All.Count);
+		var list = new List<(string, string)>(MenuItems.Count + 5 + ProtocoloAtendimentoCatalog.All.Count);
 		foreach (var m in MenuItems)
 			list.Add((m.Title, VoiceWakeSession.Normalize(m.Title)));
 		list.Add((VoiceCommandAtualizarEndereco, VoiceWakeSession.Normalize(VoiceCommandAtualizarEndereco)));
+		list.Add((VoiceCommandConsumirMateriais, VoiceWakeSession.Normalize(VoiceCommandConsumirMateriais)));
+		list.Add((VoiceCommandConsumirMaterial, VoiceWakeSession.Normalize(VoiceCommandConsumirMaterial)));
 		list.Add((VoiceCommandPare, VoiceWakeSession.Normalize(VoiceCommandPare)));
 		foreach (var p in ProtocoloAtendimentoCatalog.All)
 			list.Add((p.VoiceCommandTitle, VoiceWakeSession.Normalize(p.VoiceCommandTitle)));
@@ -199,6 +201,13 @@ public sealed partial class MainViewModel
 			    StringComparison.OrdinalIgnoreCase))
 		{
 			_ = OpenAlterarEnderecoAsync();
+			return true;
+		}
+
+		if (string.Equals(menuTitleOriginal.Trim(), VoiceCommandConsumirMateriais, StringComparison.OrdinalIgnoreCase)
+		    || string.Equals(menuTitleOriginal.Trim(), VoiceCommandConsumirMaterial, StringComparison.OrdinalIgnoreCase))
+		{
+			_ = ConsumirMateriaisAsync();
 			return true;
 		}
 

@@ -13,6 +13,12 @@ public interface IOpenAiTranscriptionService
 		string audioFilePath,
 		CancellationToken cancellationToken = default);
 
+	/// <summary>Transcreve o áudio e extrai os materiais consumidos, associando-os aos itens da tela quando possível.</summary>
+	Task<OpenAiMateriaisConsumoResult> TranscribeMateriaisConsumoAsync(
+		string audioFilePath,
+		IReadOnlyList<(string Id, string Texto)> itensLista,
+		CancellationToken cancellationToken = default);
+
 	/// <summary>Interpreta se a fala responde sim/não à pergunta (chat JSON, sem Whisper).</summary>
 	Task<OpenAiYesNoInterpretationResult> InterpretYesNoAsync(
 		string pergunta,
@@ -39,6 +45,20 @@ public readonly record struct OpenAiAddressTranscriptionResult(bool Success, str
 	public static OpenAiAddressTranscriptionResult Ok(string addressJson) => new(true, addressJson, null);
 
 	public static OpenAiAddressTranscriptionResult Fail(string error) => new(false, null, error);
+}
+
+/// <summary>Material extraído da fala: <paramref name="Id"/> do item da tela, ou null se não estiver na lista.</summary>
+public readonly record struct OpenAiMaterialConsumido(string? Id, string Material, int Quantidade);
+
+public readonly record struct OpenAiMateriaisConsumoResult(
+	bool Success,
+	IReadOnlyList<OpenAiMaterialConsumido> Materiais,
+	string? Error)
+{
+	public static OpenAiMateriaisConsumoResult Ok(IReadOnlyList<OpenAiMaterialConsumido> materiais) =>
+		new(true, materiais, null);
+
+	public static OpenAiMateriaisConsumoResult Fail(string error) => new(false, [], error);
 }
 
 public readonly record struct OpenAiYesNoInterpretationResult(

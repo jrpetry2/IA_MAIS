@@ -987,6 +987,26 @@
 													TextColor="{StaticResource SaphPrescricaoPendente}"
 													VerticalOptions="Center" />
 											</HorizontalStackLayout>
+											<HorizontalStackLayout
+												Grid.Row="1"
+												Grid.Column="1"
+												Padding="12,0,12,10"
+												HorizontalOptions="End"
+												Spacing="4"
+												IsVisible="{Binding Consumido}">
+												<Label
+													FontAttributes="Bold"
+													FontSize="14"
+													Text="✓"
+													TextColor="{StaticResource SaphBoletimCheckGreen}"
+													VerticalOptions="Center" />
+												<Label
+													FontAttributes="Bold"
+													FontSize="12"
+													Text="{Binding ConsumidoTexto}"
+													TextColor="{StaticResource SaphBoletimCheckGreen}"
+													VerticalOptions="Center" />
+											</HorizontalStackLayout>
 										</Grid>
 									</Border>
 								</DataTemplate>
@@ -1083,6 +1103,116 @@
 					IsZoomEnabled="True"
 					MapType="Street" />
 			</Grid>
+		</Grid>
+
+		<!-- Popup sim/não do protocolo — fecha pelo toque ou pela resposta por voz -->
+		<Grid
+			Grid.Row="0"
+			Grid.RowSpan="4"
+			BackgroundColor="#80000000"
+			IsVisible="{Binding ShowProtocoloConfirmPopup}">
+			<Border
+				Margin="24"
+				Padding="20,18"
+				BackgroundColor="{DynamicResource SaphPrescricaoCardBg}"
+				HorizontalOptions="Fill"
+				MaximumWidthRequest="420"
+				Stroke="{DynamicResource SaphBoletimCardStroke}"
+				StrokeThickness="1"
+				VerticalOptions="Center">
+				<Border.StrokeShape>
+					<RoundRectangle CornerRadius="12" />
+				</Border.StrokeShape>
+				<VerticalStackLayout Spacing="16">
+					<Label
+						FontAttributes="Bold"
+						FontSize="18"
+						Text="Protocolo"
+						TextColor="{DynamicResource SaphBoletimTitle}" />
+					<Label
+						FontSize="16"
+						Text="{Binding ProtocoloConfirmPergunta}"
+						TextColor="{DynamicResource SaphListTitle}" />
+					<Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+						<Button
+							Grid.Column="0"
+							BackgroundColor="Transparent"
+							BorderColor="{StaticResource SaphBoletimTeal}"
+							BorderWidth="1"
+							Command="{Binding ProtocoloConfirmNaoCommand}"
+							Text="Não"
+							TextColor="{StaticResource SaphBoletimTeal}" />
+						<Button
+							Grid.Column="1"
+							BackgroundColor="{StaticResource SaphBoletimTeal}"
+							Command="{Binding ProtocoloConfirmSimCommand}"
+							Text="Sim"
+							TextColor="{DynamicResource SaphOnActionButton}" />
+					</Grid>
+				</VerticalStackLayout>
+			</Border>
+		</Grid>
+
+		<!-- Popup de consumo de materiais por voz — grava até ao silêncio, Concluir ou Cancelar -->
+		<Grid
+			Grid.Row="0"
+			Grid.RowSpan="4"
+			BackgroundColor="#80000000"
+			IsVisible="{Binding ShowConsumoPopup}">
+			<Border
+				Margin="24"
+				Padding="20,18"
+				BackgroundColor="{DynamicResource SaphPrescricaoCardBg}"
+				HorizontalOptions="Fill"
+				MaximumWidthRequest="420"
+				Stroke="{DynamicResource SaphBoletimCardStroke}"
+				StrokeThickness="1"
+				VerticalOptions="Center">
+				<Border.StrokeShape>
+					<RoundRectangle CornerRadius="12" />
+				</Border.StrokeShape>
+				<VerticalStackLayout Spacing="16">
+					<HorizontalStackLayout Spacing="10">
+						<Label
+							FontSize="18"
+							IsVisible="{Binding IsConsumoGravando}"
+							Text="🎙"
+							VerticalOptions="Center" />
+						<Label
+							FontAttributes="Bold"
+							FontSize="18"
+							Text="Consumir materiais"
+							TextColor="{DynamicResource SaphBoletimTitle}"
+							VerticalOptions="Center" />
+					</HorizontalStackLayout>
+					<Label
+						FontSize="16"
+						Text="{Binding ConsumoStatusText}"
+						TextColor="{DynamicResource SaphListTitle}" />
+					<Label
+						FontSize="13"
+						Text="Ex.: «bomba de infusão 1 unidade e desfibrilador 1»"
+						TextColor="{DynamicResource SaphListTitle}"
+						IsVisible="{Binding IsConsumoGravando}" />
+					<Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+						<Button
+							Grid.Column="0"
+							BackgroundColor="Transparent"
+							BorderColor="{StaticResource SaphBoletimTeal}"
+							BorderWidth="1"
+							Command="{Binding ConsumoCancelarCommand}"
+							Text="Cancelar"
+							TextColor="{StaticResource SaphBoletimTeal}" />
+						<Button
+							Grid.Column="1"
+							BackgroundColor="{StaticResource SaphBoletimTeal}"
+							Command="{Binding ConsumoConcluirCommand}"
+							IsVisible="{Binding IsConsumoGravando}"
+							Text="Concluir"
+							TextColor="{DynamicResource SaphOnActionButton}" />
+					</Grid>
+				</VerticalStackLayout>
+			</Border>
 		</Grid>
 
 		<!-- Toast de sucesso — overlay em baixo (visível em qualquer aba) -->

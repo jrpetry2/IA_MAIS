@@ -66,6 +66,21 @@ sealed class MediaRecorderVoiceCapture : IDisposable
 			&& new FileInfo(_outputPath).Length > 0;
 	}
 
+	/// <summary>Pico de amplitude desde a última chamada (0 se não está a gravar).</summary>
+	public int ReadMaxAmplitude()
+	{
+		if (!IsRecording || _recorder is null)
+			return 0;
+		try
+		{
+			return _recorder.MaxAmplitude;
+		}
+		catch
+		{
+			return 0;
+		}
+	}
+
 	void StopAndRelease()
 	{
 		IsRecording = false;

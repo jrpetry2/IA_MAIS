@@ -11,4 +11,7 @@ public interface IPressHoldAudioRecordService
 	Task<bool> StartAsync();
 
 	Task StopAsync();
+
+	/// <summary>Pico de amplitude (0–32767) desde a última leitura; 0 se não está a gravar. Serve para detectar silêncio.</summary>
+	int ReadMaxAmplitude();
 }

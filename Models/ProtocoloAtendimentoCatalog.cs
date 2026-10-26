@@ -36,7 +36,7 @@ public sealed class ProtocoloAtendimentoDefinicao
 public static class ProtocoloAtendimentoCatalog
 {
 	public const string PerguntaRelembrarProcedimento =
-		"Deseja relembrar o procedimento de atendimento neste atendimento?";
+		"Deseja relembrar o procedimento de atendimento?";
 
 	static readonly ProtocoloAtendimentoDefinicao PcrDefinicao = CreatePcr();
 	static readonly ProtocoloAtendimentoDefinicao AfogamentoDefinicao = CreateAfogamento();

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Threading.Channels;
+using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using SaphMovel.Models;
 using SaphMovel.Services.OpenAi;
@@ -68,6 +69,8 @@ public sealed partial class MainViewModel
 	async Task AskRelembrarProcedimentoAsync(ProtocoloAtendimentoDefinicao def)
 	{
 		var gen = Interlocked.Increment(ref _protocolConfirmGeneration);
+		// Pergunta anterior ainda aberta (novo protocolo activado): encerra-a sem resposta.
+		Interlocked.Exchange(ref _protocolConfirmAnswer, null)?.TrySetResult(null);
 		const string pergunta = ProtocoloAtendimentoCatalog.PerguntaRelembrarProcedimento;
 		var voskHost = IsVoiceMicrophoneActive ? this : null;
 
@@ -83,19 +86,30 @@ public sealed partial class MainViewModel
 		if (gen != _protocolConfirmGeneration)
 			return;
 
-		bool? resposta = null;
-		if (IsVoiceMicrophoneActive)
+		// Popup e escuta por voz em simultâneo: a primeira resposta (toque ou fala) vence e encerra a outra.
+		var answer = new TaskCompletionSource<bool?>(TaskCreationOptions.RunContinuationsAsynchronously);
+		Volatile.Write(ref _protocolConfirmAnswer, answer);
+		using var voiceCts = new CancellationTokenSource();
+		bool? resposta;
+		try
 		{
-			_ = ShowSuccessToastAsync("Diga sim ou não…", visibleMs: 3500);
-			resposta = await TryInterpretVoiceYesNoAsync(pergunta, TimeSpan.FromSeconds(10), gen)
-				.ConfigureAwait(false);
+			await SetProtocoloConfirmPopupAsync(true, pergunta).ConfigureAwait(false);
+
+			if (IsVoiceMicrophoneActive)
+			{
+				_ = ShowSuccessToastAsync("Diga sim ou não…", visibleMs: 3500);
+				_ = ListenVoiceYesNoAsync(pergunta, gen, answer, voiceCts.Token);
+			}
+
+			resposta = await answer.Task.ConfigureAwait(false);
 		}
-
-		if (gen != _protocolConfirmGeneration)
-			return;
-
-		if (resposta is null)
-			resposta = await ShowRelembrarAlertAsync().ConfigureAwait(false);
+		finally
+		{
+			voiceCts.Cancel();
+			Interlocked.CompareExchange(ref _protocolConfirmAnswer, null, answer);
+			if (Volatile.Read(ref _protocolConfirmAnswer) is null)
+				await SetProtocoloConfirmPopupAsync(false, pergunta).ConfigureAwait(false);
+		}
 
 		if (gen != _protocolConfirmGeneration)
 			return;
@@ -120,11 +134,12 @@ public sealed partial class MainViewModel
 	/// Ouve até <paramref name="timeout"/>: cada frase é avaliada localmente (offline) e, se ambígua, pela IA.
 	/// Eco da pergunta e respostas indefinidas não encerram a espera. Devolve null se ninguém respondeu.
 	/// </summary>
-	async Task<bool?> TryInterpretVoiceYesNoAsync(string pergunta, TimeSpan timeout, int gen)
+	async Task<bool?> TryInterpretVoiceYesNoAsync(string pergunta, TimeSpan timeout, int gen, CancellationToken cancellationToken)
 	{
 		var channel = Channel.CreateUnbounded<string>(new UnboundedChannelOptions { SingleReader = true });
 		Volatile.Write(ref _protocolYesNoUtterances, channel);
-		using var cts = new CancellationTokenSource(timeout);
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+		cts.CancelAfter(timeout);
 		try
 		{
 			while (true)
@@ -177,19 +192,48 @@ public sealed partial class MainViewModel
 		}
 	}
 
-	static async Task<bool?> ShowRelembrarAlertAsync()
+	/// <summary>Escuta por voz em paralelo ao popup; só entrega resposta se ouviu sim/não (o tempo esgotado deixa o popup à espera do toque).</summary>
+	async Task ListenVoiceYesNoAsync(string pergunta, int gen, TaskCompletionSource<bool?> answer, CancellationToken cancellationToken)
 	{
-		var page = UiDialogHost.GetPage();
-		if (page is null)
-			return null;
-
-		return await MainThread.InvokeOnMainThreadAsync(async () =>
-			await page.DisplayAlertAsync(
-				"Protocolo",
-				ProtocoloAtendimentoCatalog.PerguntaRelembrarProcedimento,
-				"Sim",
-				"Não")).ConfigureAwait(false);
+		try
+		{
+			var resposta = await TryInterpretVoiceYesNoAsync(pergunta, TimeSpan.FromSeconds(10), gen, cancellationToken)
+				.ConfigureAwait(false);
+			if (resposta is not null)
+				answer.TrySetResult(resposta);
+		}
+		catch
+		{
+			/* cancelado pela resposta na tela ou falha da IA: o popup continua à espera */
+		}
 	}
+
+	bool _showProtocoloConfirmPopup;
+	string _protocoloConfirmPergunta = "";
+	TaskCompletionSource<bool?>? _protocolConfirmAnswer;
+	ICommand? _protocoloConfirmSimCommand;
+	ICommand? _protocoloConfirmNaoCommand;
+
+	public bool ShowProtocoloConfirmPopup => _showProtocoloConfirmPopup;
+	public string ProtocoloConfirmPergunta => _protocoloConfirmPergunta;
+
+	public ICommand ProtocoloConfirmSimCommand =>
+		_protocoloConfirmSimCommand ??= new Command(() => AnswerProtocoloConfirm(true));
+
+	public ICommand ProtocoloConfirmNaoCommand =>
+		_protocoloConfirmNaoCommand ??= new Command(() => AnswerProtocoloConfirm(false));
+
+	void AnswerProtocoloConfirm(bool resposta) =>
+		Volatile.Read(ref _protocolConfirmAnswer)?.TrySetResult(resposta);
+
+	Task SetProtocoloConfirmPopupAsync(bool visible, string pergunta) =>
+		MainThread.InvokeOnMainThreadAsync(() =>
+		{
+			_protocoloConfirmPergunta = pergunta;
+			_showProtocoloConfirmPopup = visible;
+			OnPropertyChanged(nameof(ProtocoloConfirmPergunta));
+			OnPropertyChanged(nameof(ShowProtocoloConfirmPopup));
+		});
 
 	void FillPrescricaoDados() =>
 		ApplyPrescricaoPacote(DemoPrescricaoFactory.Inicial(), switchToTab: false, announce: false);
@@ -242,12 +286,5 @@ public sealed partial class MainViewModel
 		var page = UiDialogHost.GetPage();
 		if (page is not null)
 			await page.DisplayAlertAsync("Prescrição", "Fluxo PRESCREVER (integração com API).", "OK");
-	}
-
-	async Task ConsumirPlaceholderAsync()
-	{
-		var page = UiDialogHost.GetPage();
-		if (page is not null)
-			await page.DisplayAlertAsync("Prescrição", "Fluxo CONSUMIR (integração com API).", "OK");
 	}
 }

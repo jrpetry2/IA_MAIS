@@ -89,6 +89,33 @@ public sealed class OpenAiTranscriptionOptions
 		8. Retorne apenas o JSON final.
 		""";
 
+	public const string MateriaisTranscriptionPrompt =
+		"Transcreva esta gravação de áudio em português do Brasil: materiais e equipamentos de atendimento pré-hospitalar e as quantidades consumidas.";
+
+	/// <summary>Prompt do 2.º passo (chat): texto transcrito → JSON de materiais consumidos. <c>{LISTA}</c> é substituído pelos itens da tela.</summary>
+	public const string MateriaisExtractionSystemPrompt =
+		"""
+		Você é um extrator de materiais consumidos num atendimento pré-hospitalar, em português do Brasil.
+
+		Itens prescritos mostrados na tela (id: texto):
+		{LISTA}
+
+		Extraia do texto informado cada material dito como consumido e retorne exclusivamente um JSON válido, sem explicações, sem markdown e sem texto adicional.
+
+		Formato:
+		{"materiais":[{"id":"<id do item da lista ou null>","material":"<nome do material em maiúsculas>","quantidade":<inteiro>}]}
+
+		Regras:
+		1. Se o material corresponder a um item da lista (mesmo com grafia, abreviação ou palavras diferentes, ex.: "bomba de infusão" = "BOMBA INFUSÃO"), use o id desse item e o nome como está na lista, sem a quantidade.
+		2. Se não corresponder a nenhum item da lista, use "id": null e escreva o nome do material em maiúsculas.
+		3. "quantidade" é o número dito (por extenso ou em algarismos: "uma unidade" = 1, "duas" = 2). Se não for dito, use 1.
+		4. Vários materiais na mesma fala geram várias entradas.
+		5. Ignore palavras de comando como "consumir", "materiais", "olá sistema", "pronto", "concluir".
+		6. Ignore erros de ASR e grafias aproximadas.
+		7. Se não houver nenhum material, retorne {"materiais":[]}.
+		8. Retorne apenas o JSON final.
+		""";
+
 	public string ApiKey { get; set; } = "";
 
 	/// <summary>Modelo para <c>/v1/audio/transcriptions</c>.</summary>

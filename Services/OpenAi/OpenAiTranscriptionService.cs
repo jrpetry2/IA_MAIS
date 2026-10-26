@@ -62,6 +62,80 @@ public sealed class OpenAiTranscriptionService : IOpenAiTranscriptionService
 			: OpenAiAddressTranscriptionResult.Fail(result.Error!);
 	}
 
+	public async Task<OpenAiMateriaisConsumoResult> TranscribeMateriaisConsumoAsync(
+		string audioFilePath,
+		IReadOnlyList<(string Id, string Texto)> itensLista,
+		CancellationToken cancellationToken = default)
+	{
+		var lista = itensLista.Count == 0
+			? "(nenhum)"
+			: string.Join('\n', itensLista.Select(i => $"{i.Id}: {i.Texto}"));
+		var systemPrompt = OpenAiTranscriptionOptions.MateriaisExtractionSystemPrompt
+			.Replace("{LISTA}", lista, StringComparison.Ordinal);
+
+		var result = await TranscribeStructuredJsonAsync(
+			audioFilePath,
+			OpenAiTranscriptionOptions.MateriaisTranscriptionPrompt,
+			systemPrompt,
+			"materiais",
+			useVitalsJsonExtractor: false,
+			cancellationToken).ConfigureAwait(false);
+
+		if (!result.Success)
+			return OpenAiMateriaisConsumoResult.Fail(result.Error!);
+
+		return TryParseMateriais(result.Json!, out var materiais)
+			? OpenAiMateriaisConsumoResult.Ok(materiais)
+			: OpenAiMateriaisConsumoResult.Fail("Extração de materiais sem o formato esperado.");
+	}
+
+	static bool TryParseMateriais(string json, out IReadOnlyList<OpenAiMaterialConsumido> materiais)
+	{
+		materiais = [];
+		try
+		{
+			using var doc = JsonDocument.Parse(json);
+			if (!doc.RootElement.TryGetProperty("materiais", out var arr) || arr.ValueKind != JsonValueKind.Array)
+				return false;
+
+			var list = new List<OpenAiMaterialConsumido>();
+			foreach (var el in arr.EnumerateArray())
+			{
+				if (el.ValueKind != JsonValueKind.Object)
+					continue;
+
+				string? id = el.TryGetProperty("id", out var idEl) && idEl.ValueKind == JsonValueKind.String
+					? idEl.GetString()?.Trim()
+					: null;
+				var material = el.TryGetProperty("material", out var mEl) && mEl.ValueKind == JsonValueKind.String
+					? mEl.GetString()?.Trim() ?? ""
+					: "";
+				var quantidade = 1;
+				if (el.TryGetProperty("quantidade", out var qEl))
+				{
+					if (qEl.ValueKind == JsonValueKind.Number && qEl.TryGetInt32(out var q))
+						quantidade = q;
+					else if (qEl.ValueKind == JsonValueKind.String && int.TryParse(qEl.GetString(), out var qs))
+						quantidade = qs;
+				}
+
+				if (string.IsNullOrEmpty(id) && material.Length == 0)
+					continue;
+				list.Add(new OpenAiMaterialConsumido(
+					string.IsNullOrEmpty(id) ? null : id,
+					material,
+					Math.Max(1, quantidade)));
+			}
+
+			materiais = list;
+			return true;
+		}
+		catch (JsonException)
+		{
+			return false;
+		}
+	}
+
 	public async Task<OpenAiYesNoInterpretationResult> InterpretYesNoAsync(
 		string pergunta,
 		string falaUsuario,

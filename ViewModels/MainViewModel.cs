@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using SaphMovel.Models;
 using SaphMovel.Pages;
+using SaphMovel.Services.Audio;
 using SaphMovel.Services.Missao;
 using SaphMovel.Services.OpenAi;
 using SaphMovel.Services.Status;
@@ -68,6 +69,7 @@ public sealed partial class MainViewModel : ObservableModel
 	readonly IMissaoFacade _missaoFacade;
 	readonly IChamadoSpeechService _chamadoSpeech;
 	readonly IOpenAiTranscriptionService? _openAi;
+	readonly IPressHoldAudioRecordService? _recorder;
 
 	/// <summary>Device identifier for status API calls (replace with real IMEI from platform services).</summary>
 	public string DeviceImei { get; } = "359876050000000";
@@ -91,12 +93,14 @@ public sealed partial class MainViewModel : ObservableModel
 		IStatusFacade statusFacade,
 		IMissaoFacade missaoFacade,
 		IChamadoSpeechService chamadoSpeech,
-		IOpenAiTranscriptionService? openAi = null)
+		IOpenAiTranscriptionService? openAi = null,
+		IPressHoldAudioRecordService? recorder = null)
 	{
 		_statusFacade = statusFacade;
 		_missaoFacade = missaoFacade;
 		_chamadoSpeech = chamadoSpeech;
 		_openAi = openAi;
+		_recorder = recorder;
 		SelectTabCommand = new Command<string>(k => SelectedTabKey = k ?? "STATUS");
 		HeaderRefreshCommand = new Command(async () => await RefreshAsync());
 		HeaderAlertsCommand = new Command(async () => await ShowAlertsAsync());
@@ -110,7 +114,7 @@ public sealed partial class MainViewModel : ObservableModel
 		});
 		AtualizarEnderecoCommand = new Command(async () => await OpenAlterarEnderecoAsync());
 		PrescreverCommand = new Command(() => _ = PrescreverPlaceholderAsync());
-		ConsumirCommand = new Command(() => _ = ConsumirPlaceholderAsync());
+		ConsumirCommand = new Command(() => _ = ConsumirMateriaisAsync());
 		RemoverSemPrescricaoCommand = new Command<SemPrescricaoItem?>(i =>
 		{
 			if (i is null)
