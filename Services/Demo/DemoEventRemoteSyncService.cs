@@ -20,6 +20,10 @@ public sealed class DemoEventRemoteSyncService : IDisposable
 
 	MainViewModel? _host;
 	long _lastSeq;
+
+	/// <summary>A API guarda o histórico em memória: o 1.º poll só sincroniza o seq, sem reaplicar eventos antigos.</summary>
+	bool _seqSincronizado;
+
 	CancellationTokenSource? _cts;
 	Task? _loopTask;
 
@@ -106,7 +110,19 @@ public sealed class DemoEventRemoteSyncService : IDisposable
 
 		var body = await response.Content.ReadFromJsonAsync<DemoEventsPollResponse>(JsonOptions, ct)
 			.ConfigureAwait(false);
-		if (body?.Events is null || body.Events.Count == 0)
+		if (body is null)
+			return;
+
+		// Eventos enviados antes de o app abrir (ex.: desvio de um teste anterior) não são aplicados.
+		if (!_seqSincronizado)
+		{
+			_seqSincronizado = true;
+			_lastSeq = Math.Max(_lastSeq, body.LatestSeq);
+			_log.LogInformation("Demo API: sincronizado em seq={Seq}; eventos anteriores ignorados.", _lastSeq);
+			return;
+		}
+
+		if (body.Events is null || body.Events.Count == 0)
 			return;
 
 		foreach (var item in body.Events.OrderBy(e => e.Seq))

@@ -3,6 +3,7 @@ using SaphStatus;
 using SaphStatus.Api;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://0.0.0.0:5088");
 
 builder.Services.ConfigureHttpJsonOptions(o =>
 {

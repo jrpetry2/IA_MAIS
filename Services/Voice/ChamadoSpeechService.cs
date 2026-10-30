@@ -25,6 +25,14 @@ public sealed class ChamadoSpeechService : IChamadoSpeechService
 
 	public DateTime LastSpeechEndedUtc => new(Interlocked.Read(ref _lastSpeechEndedTicks), DateTimeKind.Utc);
 
+	public event EventHandler? SpeakingChanged;
+
+	void BeginSpeech()
+	{
+		_isSpeaking = true;
+		SpeakingChanged?.Invoke(this, EventArgs.Empty);
+	}
+
 	/// <summary>Só a fala mais recente (dona do <see cref="_cts"/>) limpa o estado — uma fala cancelada não pode marcar «parou de falar».</summary>
 	void EndSpeech(CancellationTokenSource linked)
 	{
@@ -37,6 +45,8 @@ public sealed class ChamadoSpeechService : IChamadoSpeechService
 			_cts.Dispose();
 			_cts = null;
 		}
+
+		SpeakingChanged?.Invoke(this, EventArgs.Empty);
 	}
 
 	public void Cancel()
@@ -98,7 +108,7 @@ public sealed class ChamadoSpeechService : IChamadoSpeechService
 		}
 
 		var token = linked.Token;
-		// Mantém Vosk activo durante a fala para barge-in («pare»). Não pausar o microfone.
+		// Garante o Vosk activo: durante a fala ele descarta o áudio e volta a ouvir quando ela acaba.
 		if (voskHost is not null && _vosk is not null && voskHost.IsVoiceMicrophoneActive)
 		{
 			try
@@ -111,7 +121,7 @@ public sealed class ChamadoSpeechService : IChamadoSpeechService
 			}
 		}
 
-		_isSpeaking = true;
+		BeginSpeech();
 		try
 		{
 			var options = await BuildSpeechOptionsAsync(preferred: null, token).ConfigureAwait(false);
@@ -213,7 +223,7 @@ public sealed class ChamadoSpeechService : IChamadoSpeechService
 		}
 
 		var token = linked.Token;
-		_isSpeaking = true;
+		BeginSpeech();
 		try
 		{
 			var options = await BuildSpeechOptionsAsync(voice, token).ConfigureAwait(false);

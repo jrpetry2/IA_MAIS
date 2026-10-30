@@ -3,6 +3,7 @@
 	x:Class="SaphMovel.Pages.IdentificacaoPage"
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:controls="clr-namespace:SaphMovel.Controls"
 	xmlns:vm="clr-namespace:SaphMovel.ViewModels"
 	x:DataType="vm:IdentificacaoViewModel"
 	Style="{StaticResource SaphModalPage}"
@@ -40,6 +41,14 @@
 
 		<ScrollView Grid.Row="3">
 			<VerticalStackLayout Padding="16,0,16,24" Spacing="16">
+				<Label
+					FontSize="12"
+					LineBreakMode="WordWrap"
+					Text="Dite a identificação com OUVIR (nome, idade, CPF, mãe, alergias…), ou edite os campos manualmente."
+					TextColor="{DynamicResource SaphTextSecondary}" />
+
+				<controls:OuvirPanel x:Name="OuvirPanel" />
+
 				<!-- Secção: Identificação do Paciente -->
 				<Grid ColumnDefinitions="Auto,*" Style="{StaticResource SaphSectionHeaderBar}">
 					<BoxView
@@ -69,6 +78,12 @@
 						ItemsSource="{Binding SexoItems}"
 						SelectedItem="{Binding SexoPickerItem, Mode=TwoWay}"
 						Style="{StaticResource SaphFieldPicker}" />
+					<Label
+						FontSize="12"
+						IsVisible="{Binding ShowSexoSugeridoHint}"
+						LineBreakMode="WordWrap"
+						Text="Sexo sugerido pela IA a partir do nome — confira."
+						TextColor="{DynamicResource SaphTextSecondary}" />
 				</VerticalStackLayout>
 
 				<Grid ColumnDefinitions="*,*" ColumnSpacing="12">

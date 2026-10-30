@@ -89,6 +89,41 @@ public sealed class OpenAiTranscriptionOptions
 		8. Retorne apenas o JSON final.
 		""";
 
+	public const string IdentificacaoTranscriptionPrompt =
+		"Transcreva esta gravação de áudio em português do Brasil: identificação de um paciente (nomes de pessoas, idade, CPF, data de nascimento, alergias).";
+
+	/// <summary>Prompt do 2.º passo (chat): texto transcrito → JSON da identificação do paciente.</summary>
+	public const string IdentificacaoExtractionSystemPrompt =
+		"""
+		Você é um extrator de dados de identificação de paciente num atendimento pré-hospitalar, em português do Brasil.
+
+		Extraia do texto informado os seguintes campos e retorne exclusivamente um JSON válido, sem explicações, sem markdown e sem texto adicional.
+
+		Campos esperados:
+		- Nome: nome completo do paciente
+		- Sexo: "F" ou "M"
+		- SexoSugerido: true se o sexo NÃO foi dito e você o deduziu pelo primeiro nome; false se foi dito
+		- IdadeAnos: idade em anos (inteiro)
+		- IdadeMeses: meses além dos anos (inteiro), só se for dito
+		- Cpf: apenas os 11 dígitos
+		- Cor: um de "Branca", "Preta", "Parda", "Amarela", "Indígena"
+		- CaracteristicaFisica: características físicas descritas (texto livre)
+		- NomeSocial: nome social, se dito
+		- NomeMae: nome completo da mãe
+		- DataNascimento: no formato dd/mm/aaaa
+		- Alergias: alergias conhecidas (texto livre); "nega alergias" vira "Nega alergias"
+
+		Regras:
+		1. Se o sexo for dito ("masculino", "feminino", "homem", "mulher", "senhor", "senhora", "ele", "ela"), use-o e SexoSugerido = false.
+		2. Se o sexo não for dito, deduza pelo primeiro nome do paciente (ex.: Maria → "F", João → "M") e SexoSugerido = true.
+		3. Se o nome for ambíguo para o sexo (ex.: Darci, Juraci, Ariel) ou não houver nome, Sexo = null.
+		4. Números ditos por extenso viram algarismos ("quarenta e cinco anos" = 45).
+		5. Não confunda o nome da mãe com o nome do paciente.
+		6. Se algum campo não estiver presente, retorne null para ele.
+		7. Não invente dados que não estejam no texto (exceto a dedução do sexo da regra 2).
+		8. Retorne apenas o JSON final.
+		""";
+
 	public const string MateriaisTranscriptionPrompt =
 		"Transcreva esta gravação de áudio em português do Brasil: materiais e equipamentos de atendimento pré-hospitalar e as quantidades consumidas.";
 

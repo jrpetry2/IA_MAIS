@@ -3,7 +3,7 @@ namespace SaphMovel.Configuration;
 /// <summary>API de eventos de demo (painel Windows → app).</summary>
 public sealed class EventosApiOptions
 {
-	public const string DefaultBaseUrl = "http://10.0.2.34:5090";
+	public static string DefaultBaseUrl => RedeConfig.EventosBaseUrl;
 
 	public string BaseUrl { get; set; } = DefaultBaseUrl;
 

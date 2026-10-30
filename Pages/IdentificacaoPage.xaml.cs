@@ -1,25 +1,37 @@
+using SaphMovel.Platforms.Android.Ui;
+using SaphMovel.Services.Audio;
+using SaphMovel.Services.OpenAi;
 using SaphMovel.ViewModels;
 
 namespace SaphMovel.Pages;
 
 public partial class IdentificacaoPage : ContentPage
 {
+	readonly IdentificacaoViewModel _vm;
+
 	public IdentificacaoPage(MainViewModel mainVm)
 	{
 		InitializeComponent();
-		BindingContext = new IdentificacaoViewModel(mainVm, this);
+		_vm = new IdentificacaoViewModel(
+			mainVm,
+			this,
+			AppServices.GetRequiredService<IPressHoldAudioRecordService>(),
+			AppServices.GetRequiredService<IOpenAiTranscriptionService>());
+		BindingContext = _vm;
+
+		OuvirPressHoldAttach.Attach(OuvirPanel.PressArea, _vm.OnOuvirPressed, _vm.OnOuvirReleased);
 	}
 
 	protected override void OnAppearing()
 	{
 		base.OnAppearing();
-		if (BindingContext is IdentificacaoViewModel vm)
-			vm.RefreshSexoPicker();
+		_vm.RefreshSexoPicker();
 	}
 
 	protected override void OnDisappearing()
 	{
-		(BindingContext as IdentificacaoViewModel)?.Detach();
+		_vm.OnPageDisappearing();
+		_vm.Detach();
 		base.OnDisappearing();
 	}
 }

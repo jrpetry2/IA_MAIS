@@ -267,6 +267,17 @@ public sealed class VoiceWakeSession
 		return false;
 	}
 
+	/// <summary>Protocolo dito sem a wake (ex.: «ativar protocolo de afogamento», «afogamento»).</summary>
+	public static bool TryMatchProtocoloSemWake(
+		string transcriptRaw,
+		IReadOnlyList<(string OriginalTitle, string NormalizedTitle)> menuEntries,
+		out string? menuTitleOriginal)
+	{
+		menuTitleOriginal = null;
+		var n = Normalize(transcriptRaw);
+		return n.Length > 0 && TryMatchProtocolo(n, menuEntries, out menuTitleOriginal);
+	}
+
 	static bool TryMatchProtocolo(
 		string tailNorm,
 		IReadOnlyList<(string OriginalTitle, string NormalizedTitle)> menuEntries,

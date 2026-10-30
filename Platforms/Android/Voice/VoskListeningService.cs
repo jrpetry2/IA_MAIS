@@ -551,13 +551,20 @@ public sealed class VoskListeningService : IVoskListeningService
 					// Quando o assistente acaba de falar, descarta o áudio acumulado (eco do TTS)
 					// para não se misturar com a resposta do utilizador.
 					var speakingNow = CurrentViewModel()?.IsAssistantSpeaking == true;
-					if (wasSpeaking && !speakingNow)
+					if (wasSpeaking != speakingNow)
 					{
 						VoskJni.Reset(recognizer);
 						utterancePeakDbfs = double.NegativeInfinity;
-						_log.LogDebug("Vosk: reconhecedor reiniciado após fim do TTS.");
+						_log.LogDebug(speakingNow
+							? "Vosk: microfone bloqueado durante o TTS."
+							: "Vosk: reconhecedor reiniciado após fim do TTS.");
 					}
 					wasSpeaking = speakingNow;
+
+					// Microfone «bloqueado» enquanto o assistente fala: o áudio (eco do TTS) não chega ao
+					// reconhecedor. A fala só é interrompida pelo botão PARAR do cabeçalho.
+					if (speakingNow)
+						continue;
 
 					utterancePeakDbfs = Math.Max(utterancePeakDbfs, VoiceUtteranceFilter.RmsDbfs(shorts, nRead));
 
@@ -839,10 +846,6 @@ public sealed class VoskListeningService : IVoskListeningService
 		if (vm is null || session is null)
 			return;
 
-		// Barge-in: «pare» / similares interrompe o TTS sem wake.
-		if (vm.TryHandleStopSpeechUtterance(utterance))
-			return;
-
 		// Enquanto o assistente fala, ignora outros comandos (reduz eco do TTS).
 		if (vm.IsAssistantSpeaking)
 		{
@@ -865,6 +868,26 @@ public sealed class VoskListeningService : IVoskListeningService
 		}
 
 		var entries = vm.GetVoiceCommandEntries();
+
+		// Durante o atendimento, protocolos dispensam a wake («afogamento», «ativar protocolo de afogamento»).
+		if (VoskVoiceConfig.ProtocoloSemWakeEmAtendimento
+		    && vm.IsEmAtendimento
+		    && VoiceWakeSession.TryMatchProtocoloSemWake(utterance, entries, out var protocoloTitle))
+		{
+			if (DateTime.UtcNow - vm.AssistantSpeechEndedUtc < VoskVoiceConfig.ProtocoloSemWakeIgnoreAfterSpeechEnd)
+			{
+				_log.LogDebug("Vosk: protocolo sem wake ignorado (eco pós-TTS): «{Text}»", utterance);
+				return;
+			}
+
+			_log.LogDebug("Vosk: «{Text}» → protocolo sem wake {Title}", utterance, protocoloTitle);
+			if (MainThread.IsMainThread)
+				vm.TryInvokeMenuItemFromVoiceCaption(protocoloTitle!);
+			else
+				MainThread.BeginInvokeOnMainThread(() => vm.TryInvokeMenuItemFromVoiceCaption(protocoloTitle!));
+			return;
+		}
+
 		var kind = session.TryEvaluate(utterance, entries, out var menuTitle);
 		_log.LogDebug("Vosk: «{Text}» → {Kind} {Title}", utterance, kind, menuTitle);
 		switch (kind)

@@ -41,7 +41,7 @@ public static class MauiProgram
 		builder.Services.Configure<StatusApiOptions>(o =>
 		{
 #if ANDROID
-			o.BaseUrl = "http://10.0.2.2:5088";
+			o.BaseUrl = RedeConfig.StatusBaseUrl;
 #else
 			o.BaseUrl = "http://localhost:5088";
 #endif

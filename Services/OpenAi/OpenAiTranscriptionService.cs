@@ -62,6 +62,23 @@ public sealed class OpenAiTranscriptionService : IOpenAiTranscriptionService
 			: OpenAiAddressTranscriptionResult.Fail(result.Error!);
 	}
 
+	public async Task<OpenAiIdentificacaoTranscriptionResult> TranscribeIdentificacaoJsonAsync(
+		string audioFilePath,
+		CancellationToken cancellationToken = default)
+	{
+		var result = await TranscribeStructuredJsonAsync(
+			audioFilePath,
+			OpenAiTranscriptionOptions.IdentificacaoTranscriptionPrompt,
+			OpenAiTranscriptionOptions.IdentificacaoExtractionSystemPrompt,
+			"identificação",
+			useVitalsJsonExtractor: false,
+			cancellationToken).ConfigureAwait(false);
+
+		return result.Success
+			? OpenAiIdentificacaoTranscriptionResult.Ok(result.Json!)
+			: OpenAiIdentificacaoTranscriptionResult.Fail(result.Error!);
+	}
+
 	public async Task<OpenAiMateriaisConsumoResult> TranscribeMateriaisConsumoAsync(
 		string audioFilePath,
 		IReadOnlyList<(string Id, string Texto)> itensLista,

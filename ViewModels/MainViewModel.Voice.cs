@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
 using SaphMovel.Configuration;
@@ -32,10 +33,14 @@ public sealed partial class MainViewModel
 			OnPropertyChanged(nameof(ShowVoiceModelReadyHint));
 			OnPropertyChanged(nameof(ShowVoiceStatusArea));
 			OnPropertyChanged(nameof(VoiceStatusBannerBackgroundColor));
+			OnPropertyChanged(nameof(ShowVoiceBadge));
 		}
 	}
 
 	bool _isVoiceMicrophoneActive;
+
+	/// <summary>Selo «VOZ» do cabeçalho — escondido durante a fala, quando o botão PARAR ocupa o lugar.</summary>
+	public bool ShowVoiceBadge => IsVoiceMicrophoneActive && !IsAssistantSpeaking;
 
 	/// <summary>Mensagem quando a voz offline não está a ouvir (modelo em falta, permissão, etc.).</summary>
 	public string? VoiceOfflineHint => _voiceOfflineHint;
@@ -74,7 +79,10 @@ public sealed partial class MainViewModel
 
 	public string VoiceListeningStatusText => ShowLastVoiceHeard
 		? $"Ouvi: «{_lastVoiceHeardText}»"
-		: "A ouvir — diga «olá sistema» e um protocolo, ou «pare» para interromper a fala.";
+		: "A ouvir — diga «olá sistema» e um comando. Para interromper a fala, toque em PARAR.";
+
+	/// <summary>Há chamado em curso — protocolos podem ser ditos sem «olá sistema».</summary>
+	public bool IsEmAtendimento => !IsListaStatusScene && _missaoFacade.Atual.Payload is not null;
 
 	/// <summary>True enquanto o assistente está a falar (TTS).</summary>
 	public bool IsAssistantSpeaking => _chamadoSpeech.IsSpeaking;
@@ -82,20 +90,19 @@ public sealed partial class MainViewModel
 	/// <summary>Fim (UTC) da última fala do assistente — frases ouvidas logo a seguir são tratadas como eco.</summary>
 	public DateTime AssistantSpeechEndedUtc => _chamadoSpeech.LastSpeechEndedUtc;
 
-	/// <summary>
-	/// Durante o TTS, aceita «pare» / similares sem wake e cancela a fala.
-	/// </summary>
-	public bool TryHandleStopSpeechUtterance(string utterance)
-	{
-		if (!_chamadoSpeech.IsSpeaking)
-			return false;
-		if (!VoiceStopSpeechMatcher.IsStopCommand(utterance))
-			return false;
-		CancelAssistantSpeech();
-		return true;
-	}
-
 	public void CancelAssistantSpeech() => _chamadoSpeech.Cancel();
+
+	ICommand? _pararFalaCommand;
+
+	/// <summary>Botão PARAR do cabeçalho — o microfone fica bloqueado durante a fala, por isso «pare» por voz não chega.</summary>
+	public ICommand PararFalaCommand => _pararFalaCommand ??= new Command(CancelAssistantSpeech);
+
+	void OnAssistantSpeakingChanged(object? sender, EventArgs e) =>
+		MainThread.BeginInvokeOnMainThread(() =>
+		{
+			OnPropertyChanged(nameof(IsAssistantSpeaking));
+			OnPropertyChanged(nameof(ShowVoiceBadge));
+		});
 
 	bool _showSuccessToast;
 	string _successToastText = "";
@@ -242,14 +249,9 @@ public sealed partial class MainViewModel
 		if (now - _lastVoiceWakeHintUtc < TimeSpan.FromSeconds(14))
 			return;
 		_lastVoiceWakeHintUtc = now;
-		_ = ShowVoiceWakeFollowUpHintAsync();
-	}
-
-	static async Task ShowVoiceWakeFollowUpHintAsync()
-	{
-		await ShowAlertFromAnyThreadAsync(
-			"Voz",
-			$"«{VoskVoiceConfig.WakePhrase}» foi reconhecido. Diga em seguida o comando, por exemplo: Afogamento ou Parada cardíaca.")
-			.ConfigureAwait(false);
+		// Toast em vez de alerta: fecha sozinho e é substituído pelo toast do comando seguinte.
+		_ = ShowSuccessToastAsync(
+			$"«{VoskVoiceConfig.WakePhrase}» reconhecido. Diga o comando, ex.: Afogamento.",
+			visibleMs: 6000);
 	}
 }

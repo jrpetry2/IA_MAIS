@@ -13,6 +13,9 @@ public interface IChamadoSpeechService
 	/// <summary>Instante (UTC) em que a última fala terminou — usado para descartar o eco do TTS no Vosk.</summary>
 	DateTime LastSpeechEndedUtc { get; }
 
+	/// <summary>Disparado quando <see cref="IsSpeaking"/> muda (pode vir de qualquer thread).</summary>
+	event EventHandler? SpeakingChanged;
+
 	/// <param name="voskHost">Se a escuta Vosk estiver activa, mantém o microfone a ouvir para «pare» durante a fala.</param>
 	Task SpeakChamadoAsync(ChamadoPayload payload, MainViewModel? voskHost = null, CancellationToken cancellationToken = default);
 

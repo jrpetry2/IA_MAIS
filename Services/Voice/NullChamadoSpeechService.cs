@@ -12,6 +12,12 @@ public sealed class NullChamadoSpeechService : IChamadoSpeechService
 
 	public DateTime LastSpeechEndedUtc => DateTime.MinValue;
 
+	public event EventHandler? SpeakingChanged
+	{
+		add { }
+		remove { }
+	}
+
 	public Task SpeakChamadoAsync(
 		ChamadoPayload payload,
 		MainViewModel? voskHost = null,

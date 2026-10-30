@@ -13,6 +13,11 @@ public interface IOpenAiTranscriptionService
 		string audioFilePath,
 		CancellationToken cancellationToken = default);
 
+	/// <summary>Transcreve o áudio e extrai JSON da identificação do paciente (sexo sugerido pelo nome se não for dito).</summary>
+	Task<OpenAiIdentificacaoTranscriptionResult> TranscribeIdentificacaoJsonAsync(
+		string audioFilePath,
+		CancellationToken cancellationToken = default);
+
 	/// <summary>Transcreve o áudio e extrai os materiais consumidos, associando-os aos itens da tela quando possível.</summary>
 	Task<OpenAiMateriaisConsumoResult> TranscribeMateriaisConsumoAsync(
 		string audioFilePath,
@@ -45,6 +50,13 @@ public readonly record struct OpenAiAddressTranscriptionResult(bool Success, str
 	public static OpenAiAddressTranscriptionResult Ok(string addressJson) => new(true, addressJson, null);
 
 	public static OpenAiAddressTranscriptionResult Fail(string error) => new(false, null, error);
+}
+
+public readonly record struct OpenAiIdentificacaoTranscriptionResult(bool Success, string? IdentificacaoJson, string? Error)
+{
+	public static OpenAiIdentificacaoTranscriptionResult Ok(string json) => new(true, json, null);
+
+	public static OpenAiIdentificacaoTranscriptionResult Fail(string error) => new(false, null, error);
 }
 
 /// <summary>Material extraído da fala: <paramref name="Id"/> do item da tela, ou null se não estiver na lista.</summary>

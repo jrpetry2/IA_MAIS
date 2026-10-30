@@ -33,6 +33,15 @@ public static class VoskVoiceConfig
 	/// <summary>Frases finais que chegam logo depois do fim do TTS são quase sempre eco da própria fala.</summary>
 	public static readonly TimeSpan IgnoreAfterSpeechEnd = TimeSpan.FromMilliseconds(700);
 
+	/// <summary>Durante o atendimento, aceita protocolos sem «olá sistema» (ex.: «afogamento»).</summary>
+	public static readonly bool ProtocoloSemWakeEmAtendimento = true;
+
+	/// <summary>
+	/// Protocolo sem wake só depois desta folga após o TTS — a própria fala diz «protocolo afogamento» e o eco
+	/// voltaria a activá-lo.
+	/// </summary>
+	public static readonly TimeSpan ProtocoloSemWakeIgnoreAfterSpeechEnd = TimeSpan.FromSeconds(2);
+
 	/// <summary>Nome lógico do ZIP empacotado (MauiAsset em <c>Resources/Raw</c>).</summary>
 	public const string PackagedModelZipLogicalName = "vosk-model-small-pt.zip";
 

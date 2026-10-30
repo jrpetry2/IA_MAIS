@@ -130,6 +130,7 @@ public sealed partial class MainViewModel : ObservableModel
 		ResumoAtualDoPaciente();
 		SaphThemeController.ThemeChanged += OnSaphThemeChanged;
 		_missaoFacade.Changed += OnMissaoChanged;
+		_chamadoSpeech.SpeakingChanged += OnAssistantSpeakingChanged;
 		ApplyMissaoSnapshot(_missaoFacade.Atual);
 	}
 
